@@ -1,0 +1,40 @@
+body {
+  background-image: url(Home.png);
+  //
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+div.nav-top {
+    float: right;
+    position: relative;
+    margin: 0px 30px 30px 30px;
+}
+
+div.nav-top ul {
+  float: right;
+  //margin-right: 5px;
+}
+
+li {
+  float: right;
+  color: white;
+  font-family: sans-serif;
+  font-size: medium;
+}
+
+div.body>h1,h2 {
+  display: none;
+}
+
+div#submit {
+    position: fixed;
+    left: 57%;
+    top: 28%;
+    background: #E06A40;
+    padding: 10px 30px;
+    border-radius: 6px;
+    box-shadow: 0px 0px 44px #FFF;
+    color: azure;
+}
