@@ -28,14 +28,14 @@ ul li {
   padding-bottom: 4px;
   list-style-type: none;
   margin-left: 30px;
-  -webkit-transition-property: background-color;
+  -webkit-transition-property: color;
   -webkit-transition-duration: 0.3s;
   -webkit-transition-timing-function: ease;
 }
 
 ul li:hover {
   border-bottom-color: white;
-  background-color: rgba(255, 255, 255,0.2);
+  color: rgba(255, 255, 255,1);
   /* color: brown; */
 }
 
@@ -58,6 +58,7 @@ div.banner>h1,h2 {
   position: relative;
   top: 123px;
   width: 40%;
+  overflow: hidden;
 }
 
 div#logo {
