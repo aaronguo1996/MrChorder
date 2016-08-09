@@ -8,8 +8,6 @@ using iTextSharp;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
-
-
 namespace Test
 {
 
@@ -18,6 +16,12 @@ namespace Test
         const float lineSpace = 6;
         const float headSpace = 4;
         const float scoreRadius = lineSpace / 2;
+        const float defaultTempo = 4;
+        const int defaultCount = 4;
+        const float defaultBeginHeight = 100;
+        const float defaultIntervalHeight = 80;
+        const float defaultBeginLeft = 100;
+        const float defaultEndRight = 500;
         static void Main(string[] args)
         {
             Document document = new Document();
@@ -36,16 +40,10 @@ namespace Test
             //draw
             PdfContentByte content = writer.DirectContent;
 
-            /*
-            DrawFiveLines(content, 100, 500, 100);
-            DrawOneScore(content, 120, 100, 0);
-            DrawOneScore(content, 140, 100, -1);
-            DrawOneScore(content, 160, 100, 14);
-            DrawOneScore(content, 180, 100, 15);
-            */
-
             //array test
-
+            float[] testMusic = { 3, 3, 4, 5, 5, 4, 3, 2, 1, 1, 2, 3, 3, 2, 2, -2, -3, 16, 17, 4, 6, 9 };
+            int size = 22;
+            DrawFromArray(content, testMusic, size);
 
             /*
             content.SetColorStroke(BaseColor.BLUE);
@@ -68,6 +66,47 @@ namespace Test
             document.Close();
         }
 
+        /* draw the score from an array
+         * content: drawing object
+         * musicArray: source data
+         * size: data size
+         * count: number of bars in one line
+         * tempo: number of notes in one bar
+         */
+        static void DrawFromArray(PdfContentByte content, float[] musicArray, int size, int count = defaultCount, float tempo = defaultTempo)
+        {
+            float beginHeight = defaultBeginHeight;
+            float beginLeft = defaultBeginLeft;
+            float endRight = defaultEndRight;
+            float intervalHeight = defaultIntervalHeight;
+            int line = -1;
+            int c = -1;
+            float width = (endRight - beginLeft) / count;
+            float widthScore = (endRight - beginLeft) / (count * (tempo + 1));
+            for (int i = 0; i < size; i++)
+            {
+                //new line
+                if (i % ((int)count * tempo) == 0)
+                {
+                    line++;
+                    DrawFiveLines(content, beginLeft, endRight, beginHeight + line * intervalHeight, count);
+                }
+                //switch to next bar
+                if (i % ((int)tempo) == 0)
+                {
+                    c = (c + 1) % count;
+                }
+                DrawOneScore(content, beginLeft + c * width + widthScore * (i % ((int)tempo) + 1), beginHeight + line * intervalHeight, musicArray[i]);
+            }
+        }
+
+        /* draw a note
+         * content: drawing object
+         * left: beginning position
+         * up: beginning position
+         * number: tone
+         * flag: whether needs half tone
+         */
         static void DrawOneScore(PdfContentByte content, float left, float up, float number, bool flag = true)
         {
             up = PageSize.A4.Height - up;
@@ -121,7 +160,15 @@ namespace Test
             }
         }
 
-        static void DrawFiveLines(PdfContentByte content, float left, float right, float up, float height = lineSpace)
+        /* draw five lines
+         * content: drawing object
+         * left: beginning position
+         * right: ending position
+         * up: beginning position
+         * count: number of bars
+         * height: space between lines
+         */ 
+        static void DrawFiveLines(PdfContentByte content, float left, float right, float up, int count, float height = lineSpace)
         {
             up = PageSize.A4.Height - up;
             content.SetColorStroke(BaseColor.BLACK);
@@ -136,7 +183,7 @@ namespace Test
             content.LineTo(right, up - height * 3);
             content.MoveTo(left, up - height * 4);
             content.LineTo(right, up - height * 4);
-            //two vertical lines
+            //start & end vertical lines
             content.MoveTo(left, up);
             content.LineTo(left, up - height * 4);
             content.MoveTo(left + headSpace, up);
@@ -145,6 +192,13 @@ namespace Test
             content.LineTo(right, up - height * 4);
             content.MoveTo(right - headSpace, up);
             content.LineTo(right - headSpace, up - height * 4);
+            //middle lines
+            float width = (right - left) / count;
+            for(int i = 1; i < count; i++)
+            {
+                content.MoveTo(left + width * i, up);
+                content.LineTo(left + width * i, up - height * 4);
+            }
             //draw
             content.Stroke();
         }
