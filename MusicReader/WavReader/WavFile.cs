@@ -7,11 +7,20 @@ namespace WavReader
 {
     public class WavFile
     {
-        //chunk data of wav file
+        /// <summary>
+        /// chunk data of wav file
+        /// </summary>
         public byte[] data { get; set; }
 
-        //length of data
+        /// <summary>
+        /// length of data
+        /// </summary>
         public int length { get; set; }
+
+        /// <summary>
+        /// delta time between two sample point (second)
+        /// </summary>
+        public double dt { get; set; }
 
         /// <summary>
         /// read wav file
@@ -23,6 +32,7 @@ namespace WavReader
             var wavStream = WaveFormatConversionStream.CreatePcmStream(fileReader);
             length = (int)wavStream.Length;
             data = new byte[length];
+            dt = wavStream.TotalTime.TotalSeconds / length;
             wavStream.Read(data, 0, length);
         }
     }
