@@ -45,6 +45,7 @@ namespace Test
             int size = 22;
             DrawFromArray(content, testMusic, size);
 
+
             /*
             content.SetColorStroke(BaseColor.BLUE);
             content.MoveTo(72.0f, PageSize.A4.Height - 10);
@@ -90,6 +91,12 @@ namespace Test
                 {
                     line++;
                     DrawFiveLines(content, beginLeft, endRight, beginHeight + line * intervalHeight, count);
+                    Image sign = Image.GetInstance("C:\\Users\\t-yaxie\\Desktop\\Fun\\MrChorder\\sign.png");
+                    sign.SetAbsolutePosition(beginLeft - 12, PageSize.A4.Height - (beginHeight + line * intervalHeight + 5 * lineSpace));
+                    //sign.ScalePercent(8);
+                    sign.ScaleAbsoluteHeight(6 * lineSpace);
+                    sign.ScaleAbsoluteWidth(4 * lineSpace);
+                    content.AddImage(sign);
                 }
                 //switch to next bar
                 if (i % ((int)tempo) == 0)
@@ -173,21 +180,21 @@ namespace Test
             up = PageSize.A4.Height - up;
             content.SetColorStroke(BaseColor.BLACK);
             //five lateral lines
-            content.MoveTo(left, up);
+            content.MoveTo(left - 20, up);
             content.LineTo(right, up);
-            content.MoveTo(left, up - height);
+            content.MoveTo(left - 20, up - height);
             content.LineTo(right, up - height);
-            content.MoveTo(left, up - height * 2);
+            content.MoveTo(left - 20, up - height * 2);
             content.LineTo(right, up - height * 2);
-            content.MoveTo(left, up - height * 3);
+            content.MoveTo(left - 20, up - height * 3);
             content.LineTo(right, up - height * 3);
-            content.MoveTo(left, up - height * 4);
+            content.MoveTo(left - 20, up - height * 4);
             content.LineTo(right, up - height * 4);
             //start & end vertical lines
-            content.MoveTo(left, up);
-            content.LineTo(left, up - height * 4);
-            content.MoveTo(left + headSpace, up);
-            content.LineTo(left + headSpace, up - height * 4);
+            content.MoveTo(left - 20, up);
+            content.LineTo(left - 20, up - height * 4);
+            content.MoveTo(left - 20 + headSpace, up);
+            content.LineTo(left - 20 + headSpace, up - height * 4);
             content.MoveTo(right, up);
             content.LineTo(right, up - height * 4);
             content.MoveTo(right - headSpace, up);
