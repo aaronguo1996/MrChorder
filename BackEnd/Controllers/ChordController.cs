@@ -11,15 +11,21 @@ namespace MrChorder.Controllers
         //[HttpGet]
         public ActionResult Index()
         {
+            ViewBag.Message = "No file uploaded";
             return View();
         }
 
         [HttpPost]
-        public void GetFile(HttpPostedFileBase file)
+        public ActionResult GetFile()
         {
-            string path = System.IO.Path.Combine(Server.MapPath("~/Images"), System.IO.Path.GetFileName(file.FileName));
-            file.SaveAs(path);
-            ViewBag.Message = "File uploaded successfully";
+            foreach (string eachfile in Request.Files)
+            {
+                HttpPostedFileBase file = Request.Files[eachfile] as HttpPostedFileBase;
+                string path = System.IO.Path.Combine(Server.MapPath("~/Images"), System.IO.Path.GetFileName(file.FileName));
+                file.SaveAs(path);
+            }
+            Response.Write("File uploaded successfully");
+            return View();
         }
     }
 }
