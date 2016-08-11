@@ -91,12 +91,14 @@ namespace Test
                 {
                     line++;
                     DrawFiveLines(content, beginLeft, endRight, beginHeight + line * intervalHeight, count);
-                    Image sign = Image.GetInstance("C:\\Users\\t-yaxie\\Desktop\\Fun\\MrChorder\\sign.png");
-                    sign.SetAbsolutePosition(beginLeft - 12, PageSize.A4.Height - (beginHeight + line * intervalHeight + 5 * lineSpace));
-                    //sign.ScalePercent(8);
-                    sign.ScaleAbsoluteHeight(6 * lineSpace);
-                    sign.ScaleAbsoluteWidth(4 * lineSpace);
-                    content.AddImage(sign);
+                    if (i == 0)
+                    {
+                        Image sign = Image.GetInstance("C:\\Users\\t-yaxie\\Desktop\\Fun\\MrChorder\\sign.png");
+                        sign.SetAbsolutePosition(beginLeft - 12, PageSize.A4.Height - (beginHeight + line * intervalHeight + 5 * lineSpace));
+                        sign.ScaleAbsoluteHeight(6 * lineSpace);
+                        sign.ScaleAbsoluteWidth(4 * lineSpace);
+                        content.AddImage(sign);
+                    }
                 }
                 //switch to next bar
                 if (i % ((int)tempo) == 0)
