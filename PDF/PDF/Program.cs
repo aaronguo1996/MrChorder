@@ -32,36 +32,25 @@ namespace PDF
             document.Open();
 
             //hello world
-            document.Add(new Paragraph("HELLO WORLD!"));
+            document.AddTitle("Hello World");
+            document.AddSubject("Music Score");
             //842 595
-            string parameter = PageSize.A4.Height + " " + PageSize.A4.Width;
-            document.Add(new Paragraph(parameter));
+            Paragraph musicName = new Paragraph("Name of Music");
+            musicName.Alignment = Element.ALIGN_CENTER; 
+            document.Add(musicName);
 
             //draw
             PdfContentByte content = writer.DirectContent;
 
             //array test
-            float[] testMusic = { 3, 3, 4, 5, 5, 4, 3, 2, 1, 1, 2, 3, 3, 2, 2, -2, -3, 16, 17, 4, 6, 9 };
-            int size = 22;
+            float[] testMusic;
+            testMusic = new float[50];
+            for(int n = 0; n < 50; n++)
+            {
+                testMusic[n] = n % 20 - 4;
+            }
+            int size = 50;
             DrawFromArray(content, testMusic, size);
-
-
-            /*
-            content.SetColorStroke(BaseColor.BLUE);
-            content.MoveTo(72.0f, PageSize.A4.Height - 10);
-            content.LineTo(300.0f, PageSize.A4.Height - 10);
-            content.Stroke();
-            */
-            /*
-            content.SetColorFill(BaseColor.PINK);
-            content.Ellipse(100, 100, 300, 200);
-            content.Fill();
-            */
-            /*
-            content.SetColorStroke(BaseColor.RED);
-            content.Rectangle(PageSize.A4.Width / 7, PageSize.A4.Height * 3 / 4, PageSize.A4.Width / 2, PageSize.A4.Height / 5);
-            content.Stroke();
-            */
 
             //close
             document.Close();
@@ -84,12 +73,27 @@ namespace PDF
             int c = -1;
             float width = (endRight - beginLeft) / count;
             float widthScore = (endRight - beginLeft) / (count * (tempo + 1));
+            //it is moderate
+            content.BeginText();
+            content.SetFontAndSize(BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED), 10);
+            content.SetTextMatrix(beginLeft, PageSize.A4.Height - beginHeight + 2 * lineSpace);
+            content.ShowText("Moderate        =120");
+            content.EndText();
+            DrawOneScore(content, beginLeft + 14 * headSpace, beginHeight - 5.5f * lineSpace, 2);
             //draw the sign
             Image sign = Image.GetInstance("F:\\Microsoft\\MrChorder\\sign.png");
-            sign.SetAbsolutePosition(beginLeft - 12, PageSize.A4.Height - (beginHeight + 5 * lineSpace));
+            sign.SetAbsolutePosition(beginLeft - 18, PageSize.A4.Height - (beginHeight + 5 * lineSpace));
             sign.ScaleAbsoluteHeight(6 * lineSpace);
-            sign.ScaleAbsoluteWidth(4 * lineSpace);
+            sign.ScaleAbsoluteWidth(3.5f * lineSpace);
             content.AddImage(sign);
+            //draw the tempo
+            content.BeginText();
+            content.SetFontAndSize(BaseFont.CreateFont(BaseFont.COURIER_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED), 16);
+            content.SetTextMatrix(beginLeft, PageSize.A4.Height - (beginHeight + 2 * lineSpace));
+            content.ShowText("4");
+            content.SetTextMatrix(beginLeft, PageSize.A4.Height - (beginHeight + 4 * lineSpace));
+            content.ShowText("4");
+            content.EndText();
             //draw the scores
             for (int i = 0; i < size; i++)
             {
@@ -97,7 +101,20 @@ namespace PDF
                 if (i % ((int)count * tempo) == 0)
                 {
                     line++;
-                    DrawFiveLines(content, beginLeft, endRight, beginHeight + line * intervalHeight, count);
+                    //DrawFiveLines(content, beginLeft, endRight, beginHeight + line * intervalHeight, count);
+                    if(size- i<=count* tempo)
+                    {
+                        int remain = (size - i) / (int)tempo + 1;
+                        DrawFiveLines(content, beginLeft, beginLeft + ((float)remain / (float)count) * (endRight - beginLeft), beginHeight + line * intervalHeight, remain);
+                        //end vertical line
+                        content.MoveTo(beginLeft + ((float)remain / (float)count) * (endRight - beginLeft) - headSpace, PageSize.A4.Height - (beginHeight + line * intervalHeight));
+                        content.LineTo(beginLeft + ((float)remain / (float)count) * (endRight - beginLeft) - headSpace, PageSize.A4.Height - (beginHeight + line * intervalHeight) - lineSpace * 4);
+                        content.Stroke();
+                    }
+                    else
+                    {
+                        DrawFiveLines(content, beginLeft, endRight, beginHeight + line * intervalHeight, count);
+                    }
                 }
                 //switch to next bar
                 if (i % ((int)tempo) == 0)
@@ -194,12 +211,8 @@ namespace PDF
             //start & end vertical lines
             content.MoveTo(left - 20, up);
             content.LineTo(left - 20, up - height * 4);
-            content.MoveTo(left - 20 + headSpace, up);
-            content.LineTo(left - 20 + headSpace, up - height * 4);
             content.MoveTo(right, up);
             content.LineTo(right, up - height * 4);
-            content.MoveTo(right - headSpace, up);
-            content.LineTo(right - headSpace, up - height * 4);
             //middle lines
             float width = (right - left) / count;
             for (int i = 1; i < count; i++)
