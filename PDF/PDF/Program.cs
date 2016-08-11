@@ -25,7 +25,7 @@ namespace PDF
         static void Main(string[] args)
         {
             Document document = new Document();
-            PdfWriter writer = PdfWriter.GetInstance(document, new FileStream("C:\\Users\\t-yaxie\\Desktop\\Fun\\MrChorder\\t.pdf", FileMode.OpenOrCreate));
+            PdfWriter writer = PdfWriter.GetInstance(document, new FileStream("F:\\Microsoft\\MrChorder\\t.pdf", FileMode.OpenOrCreate));
 
             //Console.Write("%f %f", PageSize.A4.Height, PageSize.A4.Width);
             //open
@@ -84,6 +84,13 @@ namespace PDF
             int c = -1;
             float width = (endRight - beginLeft) / count;
             float widthScore = (endRight - beginLeft) / (count * (tempo + 1));
+            //draw the sign
+            Image sign = Image.GetInstance("F:\\Microsoft\\MrChorder\\sign.png");
+            sign.SetAbsolutePosition(beginLeft - 12, PageSize.A4.Height - (beginHeight + 5 * lineSpace));
+            sign.ScaleAbsoluteHeight(6 * lineSpace);
+            sign.ScaleAbsoluteWidth(4 * lineSpace);
+            content.AddImage(sign);
+            //draw the scores
             for (int i = 0; i < size; i++)
             {
                 //new line
@@ -91,14 +98,6 @@ namespace PDF
                 {
                     line++;
                     DrawFiveLines(content, beginLeft, endRight, beginHeight + line * intervalHeight, count);
-                    if (i == 0)
-                    {
-                        Image sign = Image.GetInstance("C:\\Users\\t-yaxie\\Desktop\\Fun\\MrChorder\\sign.png");
-                        sign.SetAbsolutePosition(beginLeft - 12, PageSize.A4.Height - (beginHeight + line * intervalHeight + 5 * lineSpace));
-                        sign.ScaleAbsoluteHeight(6 * lineSpace);
-                        sign.ScaleAbsoluteWidth(4 * lineSpace);
-                        content.AddImage(sign);
-                    }
                 }
                 //switch to next bar
                 if (i % ((int)tempo) == 0)
