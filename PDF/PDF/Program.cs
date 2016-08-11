@@ -8,7 +8,7 @@ using iTextSharp;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
-namespace Test
+namespace PDF
 {
 
     class Program
@@ -138,25 +138,25 @@ namespace Test
                 content.Stroke();
             }
             //if need addition lateral line
-            if(number<2 && ((int)number % 2 == 0))
+            if (number < 2 && ((int)number % 2 == 0))
             {
                 content.MoveTo(left - scoreRadius * 2, position + scoreRadius);
                 content.LineTo(left + scoreRadius * 2, position + scoreRadius);
                 content.Stroke();
             }
-            else if(number<2 && ((int)number % 2 != 0))
+            else if (number < 2 && ((int)number % 2 != 0))
             {
                 content.MoveTo(left - scoreRadius * 2, position);
                 content.LineTo(left + scoreRadius * 2, position);
                 content.Stroke();
             }
-            else if(number>12 && ((int)number % 2 == 0))
+            else if (number > 12 && ((int)number % 2 == 0))
             {
                 content.MoveTo(left - scoreRadius * 2, position - scoreRadius);
                 content.LineTo(left + scoreRadius * 2, position - scoreRadius);
                 content.Stroke();
             }
-            else if(number>12 && ((int)number % 2 != 0))
+            else if (number > 12 && ((int)number % 2 != 0))
             {
                 content.MoveTo(left - scoreRadius * 2, position);
                 content.LineTo(left + scoreRadius * 2, position);
@@ -176,7 +176,7 @@ namespace Test
          * up: beginning position
          * count: number of bars
          * height: space between lines
-         */ 
+         */
         static void DrawFiveLines(PdfContentByte content, float left, float right, float up, int count, float height = lineSpace)
         {
             up = PageSize.A4.Height - up;
@@ -203,7 +203,7 @@ namespace Test
             content.LineTo(right - headSpace, up - height * 4);
             //middle lines
             float width = (right - left) / count;
-            for(int i = 1; i < count; i++)
+            for (int i = 1; i < count; i++)
             {
                 content.MoveTo(left + width * i, up);
                 content.LineTo(left + width * i, up - height * 4);
