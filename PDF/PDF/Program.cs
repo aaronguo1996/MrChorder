@@ -81,11 +81,11 @@ namespace PDF
             content.EndText();
             DrawOneScore(content, beginLeft + 14 * headSpace, beginHeight - 5.5f * lineSpace, 2);
             //draw the sign
-            Image sign = Image.GetInstance("F:\\Microsoft\\MrChorder\\sign.png");
-            sign.SetAbsolutePosition(beginLeft - 18, PageSize.A4.Height - (beginHeight + 5 * lineSpace));
-            sign.ScaleAbsoluteHeight(6 * lineSpace);
-            sign.ScaleAbsoluteWidth(3.5f * lineSpace);
-            content.AddImage(sign);
+            //Image sign = Image.GetInstance("F:\\Microsoft\\MrChorder\\sign.png");
+            //sign.SetAbsolutePosition(beginLeft - 18, PageSize.A4.Height - (beginHeight + 5 * lineSpace));
+            //sign.ScaleAbsoluteHeight(6 * lineSpace);
+            //sign.ScaleAbsoluteWidth(3.5f * lineSpace);
+            //content.AddImage(sign);
             //draw the tempo
             content.BeginText();
             content.SetFontAndSize(BaseFont.CreateFont(BaseFont.COURIER_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED), 16);
@@ -101,8 +101,14 @@ namespace PDF
                 if (i % ((int)count * tempo) == 0)
                 {
                     line++;
+                    //draw the sign
+                    Image sign = Image.GetInstance("F:\\Microsoft\\MrChorder\\sign.png");
+                    sign.SetAbsolutePosition(beginLeft - 18, PageSize.A4.Height - (beginHeight + line * intervalHeight + 5 * lineSpace));
+                    sign.ScaleAbsoluteHeight(6 * lineSpace);
+                    sign.ScaleAbsoluteWidth(3.5f * lineSpace);
+                    content.AddImage(sign);
                     //DrawFiveLines(content, beginLeft, endRight, beginHeight + line * intervalHeight, count);
-                    if(size- i<=count* tempo)
+                    if (size- i<=count* tempo)
                     {
                         int remain = (size - i) / (int)tempo + 1;
                         DrawFiveLines(content, beginLeft, beginLeft + ((float)remain / (float)count) * (endRight - beginLeft), beginHeight + line * intervalHeight, remain);
