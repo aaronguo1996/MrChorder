@@ -1,11 +1,11 @@
-﻿using NAudio.Wave;
-
-/// <summary>
-/// read wav file
-/// </summary>
-namespace WavReader
+﻿namespace Lyra.WaveParser
 {
-    public class WavFile
+    using NAudio.Wave;
+
+    /// <summary>
+    /// audio file reader
+    /// </summary>
+    public class Audio
     {
         /// <summary>
         /// chunk data of wav file
@@ -25,8 +25,8 @@ namespace WavReader
         /// <summary>
         /// read wav file
         /// </summary>
-        /// <param name="filename">wav file name</param>
-        public WavFile(string filename)
+        /// <param name="filename">file name of audio file</param>
+        public Audio(string filename)
         {
             int sampleScale = 100;
             var fileReader = new WaveFileReader(filename);
@@ -37,7 +37,7 @@ namespace WavReader
             wavStream.Read(tmpData, 0, length);
             data = new byte[length / sampleScale];
             length = length / sampleScale;
-            for(int i = 0; i < length; ++i)
+            for (int i = 0; i < length; ++i)
             {
                 data[i] = tmpData[i * sampleScale];
             }
