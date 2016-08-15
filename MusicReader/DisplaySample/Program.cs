@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using AForge.Math;
@@ -21,7 +22,10 @@ namespace DisplaySample
 
         public static void paintHandler(Object sender, PaintEventArgs e)
         {
-            WavFile wavFile = new WavFile("t2.wav");
+            StreamWriter writer = new StreamWriter("amplitude.txt", false);
+            writer.WriteLine("frequency1: amplitude1   ;   frequency2: amplitude2");
+            writer.Close();
+            WavFile wavFile = new WavFile("t.wav");
             int length = (int)(1 / wavFile.dt / 4);
             Pen blackPen = new Pen(Color.Black, 1);
             Pen redPen = new Pen(Color.Red, 1);
@@ -49,17 +53,38 @@ namespace DisplaySample
 
                 FourierTransform.DFT(fftData, FourierTransform.Direction.Forward);
 
-                int maxAmplitudeIndex = 1;
+
+                fftData[0].Re = fftData[0].Re * fftData[0].Re + fftData[0].Im * fftData[0].Im;
+                fftData[1].Re = fftData[1].Re * fftData[1].Re + fftData[1].Im * fftData[1].Im;
+                int maxAmplitudeIndex = 0;
+                int max2AmplitudeIndex = 0;
+                if(fftData[0].Re > fftData[1].Re)
+                {
+                    max2AmplitudeIndex = 1;
+                }else
+                {
+                    maxAmplitudeIndex = 1;
+                }
+
                 double maxAmplitude = 0;
-                for (int i = 0; i < 80; ++i)// length / 2; ++i)
+                for (int i = 2; i < 80; ++i)// length / 2; ++i)
                 {
                     fftData[i].Re = fftData[i].Re * fftData[i].Re + fftData[i].Im * fftData[i].Im;
                     if(fftData[i].Re > maxAmplitude)
                     {
                         maxAmplitude = fftData[i].Re;
+                        max2AmplitudeIndex = maxAmplitudeIndex;
                         maxAmplitudeIndex = i;
                     }
                 }
+
+                double max2Amplitude = fftData[max2AmplitudeIndex].Re;
+
+                double frequency = 1 / wavFile.dt * max2AmplitudeIndex / length;
+
+                writer = new StreamWriter("amplitude.txt",true);
+                writer.WriteLine($"{1 / wavFile.dt * maxAmplitudeIndex / length}: {maxAmplitude}   ;   {1 / wavFile.dt * max2AmplitudeIndex / length}: {max2Amplitude}");
+                writer.Close();
 
                 double fftGraphScale = 0.02;
 
@@ -91,7 +116,7 @@ namespace DisplaySample
 
 
                 //loop variable
-                markLength += length / 5;
+                markLength += length;
                 if(markLength >= length / 2 * (result_index + 1))
                 {
                     int max_note = 0;
