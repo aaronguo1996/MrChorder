@@ -23,9 +23,9 @@ namespace DisplaySample
         public static void paintHandler(Object sender, PaintEventArgs e)
         {
             StreamWriter writer = new StreamWriter("amplitude.txt", false);
-            writer.WriteLine("frequency1: amplitude1   ;   frequency2: amplitude2");
+            writer.WriteLine("freq1  freq2  freq3");
             writer.Close();
-            WavFile wavFile = new WavFile("t.wav");
+            WavFile wavFile = new WavFile("t3.wav");
             int length = (int)(1 / wavFile.dt / 4);
             Pen blackPen = new Pen(Color.Black, 1);
             Pen redPen = new Pen(Color.Red, 1);
@@ -42,9 +42,9 @@ namespace DisplaySample
             int[] results = new int[wavFile.length / length / 4 * 8];
             int result_index = 0;
             int markLength = 0;
-            while (markLength < wavFile.length - length)
+          //  while (markLength < wavFile.length - length)
+          for(int xxx = 0; xxx < 20; ++xxx)
             {
-                //fft
                 Complex[] fftData = new Complex[length];
                 for (int i = 0; i < length; ++i)
                 {
@@ -53,43 +53,92 @@ namespace DisplaySample
 
                 FourierTransform.DFT(fftData, FourierTransform.Direction.Forward);
 
-
-                fftData[0].Re = fftData[0].Re * fftData[0].Re + fftData[0].Im * fftData[0].Im;
+                //get max three freq
+                fftData[3].Re = fftData[3].Re * fftData[3].Re + fftData[3].Im * fftData[3].Im;
                 fftData[1].Re = fftData[1].Re * fftData[1].Re + fftData[1].Im * fftData[1].Im;
-                int maxAmplitudeIndex = 0;
+                fftData[2].Re = fftData[2].Re * fftData[2].Re + fftData[2].Im * fftData[2].Im;
+                int max1AmplitudeIndex = 0;
                 int max2AmplitudeIndex = 0;
-                if(fftData[0].Re > fftData[1].Re)
+                int max3AmplitudeIndex = 0;
+                
+                if(fftData[3].Re >= fftData[1].Re && fftData[3].Re >= fftData[2].Re)
                 {
-                    max2AmplitudeIndex = 1;
+                    max1AmplitudeIndex = 3;
+                    //12
+                    if(fftData[1].Re >= fftData[2].Re)
+                    {
+                        max2AmplitudeIndex = 1;
+                        max3AmplitudeIndex = 2;
+                    }
+                    else
+                    {
+                        max2AmplitudeIndex = 2;
+                        max3AmplitudeIndex = 1;
+                    }
+                }else if (fftData[1].Re >= fftData[3].Re && fftData[1].Re >= fftData[2].Re)
+                {
+                    max1AmplitudeIndex = 1;
+                    //32
+                    if (fftData[3].Re >= fftData[2].Re)
+                    {
+                        max2AmplitudeIndex = 3;
+                        max3AmplitudeIndex = 2;
+                    }
+                    else
+                    {
+                        max2AmplitudeIndex = 2;
+                        max3AmplitudeIndex = 3;
+                    }
+                }else if (fftData[2].Re >= fftData[3].Re && fftData[2].Re >= fftData[1].Re)
+                {
+                    max1AmplitudeIndex = 2;
+                    //31
+                    if (fftData[3].Re >= fftData[1].Re)
+                    {
+                        max2AmplitudeIndex = 3;
+                        max3AmplitudeIndex = 1;
+                    }
+                    else
+                    {
+                        max2AmplitudeIndex = 1;
+                        max3AmplitudeIndex = 3;
+                    }
                 }else
                 {
-                    maxAmplitudeIndex = 1;
+                    throw new Exception("xxxxx");
                 }
 
-                double maxAmplitude = 0;
-                for (int i = 2; i < 80; ++i)// length / 2; ++i)
+
+                for (int i = 4; i < length / 2; ++i)
                 {
                     fftData[i].Re = fftData[i].Re * fftData[i].Re + fftData[i].Im * fftData[i].Im;
-                    if(fftData[i].Re > maxAmplitude)
+                    if (fftData[i].Re > fftData[max1AmplitudeIndex].Re)
                     {
-                        maxAmplitude = fftData[i].Re;
-                        max2AmplitudeIndex = maxAmplitudeIndex;
-                        maxAmplitudeIndex = i;
+                        max3AmplitudeIndex = max2AmplitudeIndex;
+                        max2AmplitudeIndex = max1AmplitudeIndex;
+                        max1AmplitudeIndex = i;
+                    }
+                    else if (fftData[i].Re > fftData[max2AmplitudeIndex].Re)
+                    {
+                        max3AmplitudeIndex = max2AmplitudeIndex;
+                        max2AmplitudeIndex = i;
+                    }
+                    else if (fftData[i].Re > fftData[max3AmplitudeIndex].Re)
+                    {
+                        max3AmplitudeIndex = i;
                     }
                 }
 
-                double max2Amplitude = fftData[max2AmplitudeIndex].Re;
-
-                double frequency = 1 / wavFile.dt * max2AmplitudeIndex / length;
-
                 writer = new StreamWriter("amplitude.txt",true);
-                writer.WriteLine($"{1 / wavFile.dt * maxAmplitudeIndex / length}: {maxAmplitude}   ;   {1 / wavFile.dt * max2AmplitudeIndex / length}: {max2Amplitude}");
+                writer.WriteLine($"{1 / wavFile.dt * max1AmplitudeIndex / length} {1 / wavFile.dt * max2AmplitudeIndex / length} {1 / wavFile.dt * max3AmplitudeIndex / length}");
                 writer.Close();
 
+
+                /*
                 double fftGraphScale = 0.02;
 
                 e.Graphics.DrawLine(blackPen, new Point(0, 600), new Point(1024, 600));
-                for (int i = 20; i < 80; ++i)//length / 2 ; ++i)
+                for (int i = 1; i < length / 2 ; ++i)
                 {
                     if (fftData[i].Re > 60)
                     {
@@ -113,7 +162,7 @@ namespace DisplaySample
                 //e.Graphics.DrawLine(redPen, new Point((int)(784 * wavFile.dt * 1000 + 20), 0), new Point((int)(784 * wavFile.dt * 1000 + 20), 900));
                // e.Graphics.DrawLine(redPen, new Point((int)(830 * wavFile.dt * 1000 + 20), 0), new Point((int)(830 * wavFile.dt * 1000 + 20), 900));
                // e.Graphics.DrawLine(redPen, new Point((int)(987.77 * wavFile.dt * 1000 + 20), 0), new Point((int)(987.77 * wavFile.dt * 1000 + 20), 900));
-
+               
 
                 //loop variable
                 markLength += length;
@@ -121,7 +170,7 @@ namespace DisplaySample
                 {
                     int max_note = 0;
                     int max_note_index = 0;
-                    for(int note_i = 0; note_i < 80; ++note_i)//length / 2; ++note_i)
+                    for(int note_i = 0; note_i < length / 2; ++note_i)
                     {
                         if(notes[note_i] > max_note)
                         {
@@ -136,6 +185,8 @@ namespace DisplaySample
                         notes[i] = 0;
                     }
                 }
+                */
+                markLength += 10;
             }
         }
     }
