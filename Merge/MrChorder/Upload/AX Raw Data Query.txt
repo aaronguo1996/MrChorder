@@ -1,0 +1,134 @@
+SELECT
+				CustomerInfo.CustomerName,
+                SR.[FactSurveyResponseDerivedID]
+                                ,SR.[FactServiceRequestDerivedID]
+                                ,SR.[ServiceRequestNumber]
+                                ,SR.[IsResolved]
+                                ,SR.[TimeID]
+								,SR.[DetegoInsertTimeUTC]
+								,SR.[TMPI]
+                                ,SR.[CTS_TMPI]
+                                ,SR.[GBS_TMPI]
+                                ,SR.[SRAgeMinutes]
+                                ,SR.[MaxIdleMinutes]
+                                ,SR.[DaysToClose]
+                                ,SR.[DaysToSolution]
+                                ,SR.[Sat_QOS_Overall] as Overall
+                                ,SR.[Sat_Process] as Process
+                                ,SR.[Sat_Product] as Product
+                                ,SR.[Sat_Effort] as Effort
+                                ,SR.[Sat_HelpedResolve] as Resolved
+                                ,SR.[Sat_RegistrationSpecialist] as RegistrationSpecialist
+                                ,SR.[Sat_Recommend] as Recommend
+                                ,SR.[Sat_SE_Overall] as Engineer
+                                ,SR.[Sat_SE_CommunicationSkills] as SECommunicatedClearly
+                                ,SR.[Sat_SE_Knowledge] as SEKnowledgeable
+                                ,SR.[Sat_SE_Efficient] as SEEfficient
+                                ,SR.[Sat_SE_Helpful] as SEHelpful
+                                ,SR.[Sat_SE_Responsive] as SEResponsive
+                                ,SR.[Sat_SE_TreatedCustomerasValued] as SETreatedAsValued
+                                ,SR.[Sat_SE_AccentHardToUnderstand] as SEAccent
+                                ,SR.[Sat_SE_CommunicatedProgress] as SECommunicatedProgress
+                                ,SR.[Sat_SE_SetExpectations] as SESetExpectation
+                                ,SR.[Sat_SE_Understood] as SEUnderstood
+                                ,SR.[Sat_TimeToClose] as TimetoClose
+                                ,SR.[Sat_TimetoEngineer] as TimetoEngineer
+                                ,SR.[Sat_InitialResponseTime] as InitialResponseTime
+                                ,SR.[Sat_QOS_Overall_Verbatim] as OverallVerbatim
+                                ,SR.[Sat_Overall_End_Verbatim] as EndVerbatim
+                                ,SR.[Sat_Metric_MB]
+                                ,SR.[Sat_Metric_OverallQoSBox]
+                                ,SR.[Sat_Metric_Resolved]
+                                ,SR.[Sat_SE_Overall]
+                                ,SR.[Sat_RBS_CritSit_Remediation] as RBSCritSitRemediation
+                                ,SR.[Sat_RBS_QoTS] as RBSQoTS
+                                ,SRDetail.MSSolveExternalTitle
+                                ,SRAttribute.[ServiceRequestAttributesDerivedID]
+                                ,SRAttribute.SRType
+                                ,SRAttribute.SRSubType
+                                ,SRAttribute.IsIRMet
+                                ,SRAttribute.IsCritsit
+                                ,SRAttribute.IsBug
+                                ,SRAttribute.InitialSeverity
+                                ,SRAttribute.MaxSeverity
+                                ,SRAttribute.CurrentSeverity
+                                ,SRAttribute.SupportChannel
+                                ,Employee.[EmployeeDerivedID]
+                                ,Employee.[EmployeeID]                             
+                                ,Employee.[EmployeeEmail] as [CaseOwnerEmail]
+                                ,Employee.[CurrentEmployeeEmail] AS [CaseOwnerCurrentEmail]
+                                ,Employee.[CurrentManagerEmail] AS [CaseOwnerCurrentManagerEmail]
+                                ,Employee.[IsCurrent]
+                                ,Employee.[EffectiveDateTime]
+                                ,Employee.[ProfitCenterCode]
+                                ,Employee.[GeographyLevel1] as OwnerGeographyLevel1
+                                ,Employee.[GeographyLevel2] as OwnerGeographyLevel2
+                                ,Employee.[GeographyLevel3] as OwnerGeographyLevel3
+                                ,Employee.[GeographyLevel4] as OwnerGeographyLevel4
+                                ,CustomerGeo.[GeographyLevel1Name]
+                                ,CustomerGeo.[GeographyLevel2Name]
+                                ,CustomerGeo.[GeographyLevel3Name]
+                                ,CustomerGeo.[GeographyLevel4Name]
+                                ,CustomerGeo.[ISOCountryCode]
+                                ,CustomerGeo.[CountryName]
+                                ,SO.[CTSLevel1] as ServiceLevel1
+                                ,SO.[CTSLevel2] as ServiceLevel2
+                                ,SO.[CTSLevel3] as ServiceLevel3
+                                ,SO.[CTSLevel4] as ServiceLevel4
+                                ,SO.ServiceName
+                                ,SO.ServicePackageSKU
+                                ,PESProduct.[CommercialProductLevel1Name]
+                                ,PESProduct.[CommercialProductLevel2Name]
+                                ,PESProduct.[CommercialProductLevel3Name]
+                                ,PESProduct.CloudProductsFilter
+                                ,DataSource.DataSourceName
+                                ,SupportTopic.SupportTopicLevel1Name
+                                ,SupportTopic.SupportTopicLevel2Name
+                                ,SupportTopic.SupportTopicLevel3Name
+                                ,SR.GlobalContractDerivedID
+                                ,GContract.[MSSalesTPID]
+                                ,DimQueue.AgentFacingQueueName
+                                ,DimQueue.SupportType
+                                ,DimQueue.[QueueName]
+                                ,IssueCode.[IssueCode1Name]
+                                ,IssueCode.[IssueCode2Name]
+                                ,IssueCode.[IssueCode3Name]
+                                ,IssueCode.[IssueCode4Name]
+                    ,CustLanguage.[LanguageDerivedID] AS CustLanguageDerivedID
+        ,CustLanguage.[LanguageLevel1] AS CustLanguageLevel1
+        ,CustLanguage.[LanguageLevel2] AS CustLanguageLevel2
+        ,CustLanguage.[Language] AS CustLanguage
+        ,CustLanguage.[LanguageLocale] AS CustLanguageLocale
+        ,CustLanguage.[LCID] AS CustLanguageLCID
+        ,CustLanguage.[StatusCode] AS CustLanguageStatusCode
+        ,TenantAttribute.[OrderedSeatBucket]
+        ,TenantDetail.[TenantName]
+                                ,Employee.WorkGroup as [CaseOwnerWorkgroup]
+                                ,Employee.[MasteredCompanyName]
+                                ,Employee.[MasteredCompanyCountry]
+                                ,Employee.[MasteredCompanyLocation]
+                                ,Employee.IsOutsourcedVendor AS [CaseOwnerIsOutsourcedVendor]
+                                ,Employee.CostCenterCode AS [CaseOwnerCostCenter]
+                                ,Employee.[ProfitCenterSalesGeoSalesDistrict]
+                                ,Employee.[ProfitCenterSalesGeoSalesSubLocation]
+                                ,SR.[NativeSurveyCompletedID]
+FROM    (SELECT * FROM [dbo].[vwFactSurveyResponse] WITH (NOLOCK) WHERE [DetegoInsertTimeUTC] > dateadd(dd,-1,getdate())) SR
+JOIN    [dbo].[vwDimServiceRequestDetail] SRDetail WITH (NOLOCK) ON SR.SRDetailDerivedID=SRDetail.ServiceRequestDetailDerivedID
+JOIN    [dbo].[vwDimServiceRequestAttribute] SRAttribute WITH (NOLOCK) ON SR.SRAttributesDerivedID = SRAttribute.ServiceRequestAttributesDerivedID
+JOIN    [dbo].[vwDimEmployee] Employee WITH (NOLOCK) ON SR.[OwnerEmployeeDerivedID] = Employee.EmployeeDerivedID
+JOIN    [dbo].[vwDimGeography] CustomerGeo WITH (NOLOCK) ON SR.CustomerGeographyDerivedID = CustomerGeo.GeographyDerivedID
+JOIN    [dbo].[vwDimServiceOffering] SO WITH (NOLOCK) ON SR.ServiceOfferingDerivedID = SO.ServiceDerivedID
+JOIN    [dbo].[vwDimPESProduct] PESProduct WITH (NOLOCK) ON SR.PESProductDerivedID = PESProduct.ProductDerivedID 
+JOIN    [dbo].[vwDimDataSource] DataSource WITH (NOLOCK) ON SR.DataSourceID = DataSource.DataSourceID
+JOIN    [dbo].[vwDimSupportTopic] SupportTopic WITH (NOLOCK) ON SR.CurrentSupportTopicDerivedID = SupportTopic.SupportTopicDerivedID
+JOIN    [dbo].[vwDimGlobalContract] GContract WITH (NOLOCK) ON SR.GlobalContractDerivedID = GContract.GlobalContractDerivedID
+JOIN    [dbo].[vwDimQueue] DimQueue WITH (NOLOCK) ON SR.QueueDerivedID = DimQueue.QueueDerivedID
+JOIN    [dbo].[vwDimIssueCode] IssueCode WITH (NOLOCK) ON SR.[IssueCodeDerivedID] = IssueCode.[IssueCodeDerivedID]
+JOIN    [dbo].[vwDimLanguage] CustLanguage ON SR.[SupportLanguageDerivedID] = CustLanguage.[LanguageDerivedID]
+JOIN    [dbo].[vwDimTenantAttribute] TenantAttribute WITH (NOLOCK) ON SR.[TenantAttributeDerivedID] = TenantAttribute.[TenantAttributeDerivedID]
+JOIN    [dbo].[vwDimTenantDetail] TenantDetail WITH (NOLOCK) ON SR.[TenantDetailDerivedID] = TenantDetail.[TenantDetailDerivedID]
+JOIN    [dbo].[vwFactServiceRequest] Request with (NOLOCK) on Request.[ServiceRequestNumber] = SR.[ServiceRequestNumber]
+JoIN    [dbo].[vwDimCustomer] CustomerInfo WITH (NOLOCK) on Request.[OriginalContactCustomerDerivedID] = CustomerInfo.[CustomerDerivedID]
+
+where PESProduct.[CommercialProductLevel2Name] like 'Dynamics ERP%' and Employee.[GeographyLevel2] ='Asia' and DataSource.DataSourceName='MSSolveODS'
+order by SR.[DetegoInsertTimeUTC] asc
