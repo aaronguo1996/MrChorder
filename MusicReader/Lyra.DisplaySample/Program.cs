@@ -24,9 +24,9 @@
             StreamWriter writer = new StreamWriter("amplitude.txt", false);
             writer.WriteLine("freq1  freq2  freq3");
             writer.Close();
-            Audio audio = new Audio("t3.wav");
+            Audio audio = new Audio("t.wav");
 
-            int length = (int)(1 / audio.dt / 4);
+            int length = (int)(audio.fs / 4);
             Pen blackPen = new Pen(Color.Black, 1);
             Pen redPen = new Pen(Color.Red, 1);
 
@@ -39,7 +39,7 @@
             {
                 notes[i] = 0;
             }
-            int[] results = new int[audio.length / length / 4 * 8];
+            int[] results = new int[audio.data.Length / length / 4 * 8];
             int result_index = 0;
             int markLength = 0;
             //  while (markLength < wavFile.length - length)
@@ -55,7 +55,7 @@
                 }
 
                 writer = new StreamWriter("amplitude.txt", true);
-                writer.WriteLine($"{1 / audio.dt * max1AmplitudeIndex / length} {1 / audio.dt * max2AmplitudeIndex / length} {1 / audio.dt * max3AmplitudeIndex / length}");
+                writer.WriteLine($"{audio.fs * max1AmplitudeIndex / length} {audio.fs * max2AmplitudeIndex / length} {audio.fs * max3AmplitudeIndex / length}");
                 writer.Close();
 
 
