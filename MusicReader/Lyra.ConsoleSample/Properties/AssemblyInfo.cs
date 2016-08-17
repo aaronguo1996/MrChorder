@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("DisplaySample")]
+[assembly: AssemblyTitle("Lyra.ConsoleSample")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DisplaySample")]
+[assembly: AssemblyProduct("Lyra.ConsoleSample")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("268df7d8-4e0e-4201-bce4-4e0d309c8588")]
+[assembly: Guid("24f7c414-382d-43fb-bf21-5fa0b06c1dd3")]
 
 // 程序集的版本信息由下列四个值组成: 
 //

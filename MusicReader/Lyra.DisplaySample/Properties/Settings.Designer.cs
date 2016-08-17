@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DisplaySample.Properties
+namespace Lyra.DisplaySample.Properties
 {
 
 
