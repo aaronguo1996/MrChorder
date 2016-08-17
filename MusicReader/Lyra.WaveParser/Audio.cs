@@ -95,16 +95,24 @@
                 this.data = new byte[length];
                 for (int i = 0; i < length; ++i)
                 {
-                    //average value filter
-                    int result = 0;
                     int startIndex = (int)(scale * i);
                     int endIndex = (int)(scale * (i + 1));
+                    
+                    /*
+                    //average value filter
+                    int result = 0;
                     for (int j = startIndex; j < endIndex; ++j)
                     {
                         result += rawData[j];
                     }
 
                     this.data[i] = (byte)(result / (endIndex - startIndex));
+                    */
+                    
+                    //mid value filter
+                    Array.Sort(rawData, startIndex, endIndex - startIndex);
+                    this.data[i] = rawData[(startIndex + endIndex) / 2];
+                    
                 }
             }
             catch
@@ -117,64 +125,88 @@
         public float[][] GetNMaxAmpFreqs(int n)
         {
             //count is 32 magically
-            //[TODO] n is 5 magically
+            //[TODO] n is 5 magically, and freq start from 60
             const int count = 32;
             n = 5;
             float[][] result = new float[count][];
             double[] fftData;
             int offset = 2048;
-
-            for (int i = 0; i < count; ++i, offset += 256)
+            for (int i = 0; i < count; ++i, offset += 128)
             {
                 fftData = GetFFTResult(offset);
-                Array.Sort(fftData, 1, 5);
-                int max1AmplitudeIndex = 5;
-                int max2AmplitudeIndex = 4;
-                int max3AmplitudeIndex = 3;
-                int max4AmplitudeIndex = 2;
-                int max5AmplitudeIndex = 1;
-                
-                for (int j = n + 1; j < this.fftLength / 2; ++j)
+                while (true)
                 {
-                    if (fftData[j] > fftData[max1AmplitudeIndex])
+                    Array.Sort(fftData, 15, 5);
+                    int max1AmplitudeIndex = 19;
+                    int max2AmplitudeIndex = 18;
+                    int max3AmplitudeIndex = 17;
+                    int max4AmplitudeIndex = 16;
+                    int max5AmplitudeIndex = 15;
+
+                    for (int j = n + 15; j < this.fftLength / 2; ++j)
                     {
-                        max5AmplitudeIndex = max4AmplitudeIndex;
-                        max4AmplitudeIndex = max3AmplitudeIndex;
-                        max3AmplitudeIndex = max2AmplitudeIndex;
-                        max2AmplitudeIndex = max1AmplitudeIndex;
-                        max1AmplitudeIndex = j;
+                        if (fftData[j] > fftData[max1AmplitudeIndex])
+                        {
+                            max5AmplitudeIndex = max4AmplitudeIndex;
+                            max4AmplitudeIndex = max3AmplitudeIndex;
+                            max3AmplitudeIndex = max2AmplitudeIndex;
+                            max2AmplitudeIndex = max1AmplitudeIndex;
+                            max1AmplitudeIndex = j;
+                        }
+                        else if (fftData[j] > fftData[max2AmplitudeIndex])
+                        {
+                            max5AmplitudeIndex = max4AmplitudeIndex;
+                            max4AmplitudeIndex = max3AmplitudeIndex;
+                            max3AmplitudeIndex = max2AmplitudeIndex;
+                            max2AmplitudeIndex = j;
+                        }
+                        else if (fftData[j] > fftData[max3AmplitudeIndex])
+                        {
+                            max5AmplitudeIndex = max4AmplitudeIndex;
+                            max4AmplitudeIndex = max3AmplitudeIndex;
+                            max3AmplitudeIndex = j;
+                        }
+                        else if (fftData[j] > fftData[max4AmplitudeIndex])
+                        {
+                            max5AmplitudeIndex = max4AmplitudeIndex;
+                            max4AmplitudeIndex = j;
+                        }
+                        else if (fftData[j] > fftData[max5AmplitudeIndex])
+                        {
+                            max5AmplitudeIndex = j;
+                        }
                     }
-                    else if (fftData[j] > fftData[max2AmplitudeIndex])
+
+                    int[] tmpIndices = new int[n];
+                    tmpIndices[0] = max1AmplitudeIndex;
+                    tmpIndices[1] = max2AmplitudeIndex;
+                    tmpIndices[2] = max3AmplitudeIndex;
+                    tmpIndices[3] = max4AmplitudeIndex;
+                    tmpIndices[4] = max5AmplitudeIndex;
+                    Array.Sort(tmpIndices);
+
+                    bool passed = true;
+                    //elinimate near frequency
+                    for (int j = 1; j < n; ++j)
                     {
-                        max5AmplitudeIndex = max4AmplitudeIndex;
-                        max4AmplitudeIndex = max3AmplitudeIndex;
-                        max3AmplitudeIndex = max2AmplitudeIndex;
-                        max2AmplitudeIndex = j;
+                        if (tmpIndices[j] == tmpIndices[j - 1] + 1)
+                        {
+                            fftData[tmpIndices[j]] = 0;
+                            passed = false;
+                        }
                     }
-                    else if (fftData[j] > fftData[max3AmplitudeIndex])
+
+                    if (passed)
                     {
-                        max5AmplitudeIndex = max4AmplitudeIndex;
-                        max4AmplitudeIndex = max3AmplitudeIndex;
-                        max3AmplitudeIndex = j;
-                    }
-                    else if (fftData[j] > fftData[max4AmplitudeIndex])
-                    {
-                        max5AmplitudeIndex = max4AmplitudeIndex;
-                        max4AmplitudeIndex = j;
-                    }
-                    else if (fftData[j] > fftData[max5AmplitudeIndex])
-                    {
-                        max5AmplitudeIndex = j;
+                        result[i] = new float[n];
+                        for (int j = 0; j < n; ++j)
+                        {
+                            result[i][j] = (float)tmpIndices[0] * this.fs / this.fftLength;
+                        }
+
+                        break;
                     }
                 }
-
-                result[i] = new float[n];
-                result[i][0] = (float)max1AmplitudeIndex * this.fs / this.fftLength;
-                result[i][1] = (float)max2AmplitudeIndex * this.fs / this.fftLength;
-                result[i][2] = (float)max3AmplitudeIndex * this.fs / this.fftLength;
-                result[i][3] = (float)max4AmplitudeIndex * this.fs / this.fftLength;
-                result[i][4] = (float)max5AmplitudeIndex * this.fs / this.fftLength;
-                Array.Sort(result[i]);
             }
 
             return result;

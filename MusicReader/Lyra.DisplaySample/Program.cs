@@ -21,7 +21,7 @@
 
         public static void paintHandler(Object sender, PaintEventArgs e)
         {
-            Audio audio = new Audio("t2.wav");
+            Audio audio = new Audio("3.wav");
             Pen blackPen = new Pen(Color.Black, 1);
             /*
             //graph of front 1024 points
@@ -32,11 +32,15 @@
             }
             */
 
-            double[] fftData = audio.GetFFTResult(8192);
-            for (int i = 0; i < audio.fs / 4; ++i)
+            double[] fftData = audio.GetFFTResult(4736);
+            for (int i = 1; i < audio.fftLength / 2; ++i)
             {
                 e.Graphics.DrawLine(blackPen, new Point(i, (int)(600 - fftData[i])), new Point(i, 600));
             }
+            e.Graphics.DrawLine(blackPen, new Point(130 * audio.fftLength / audio.fs, 700), new Point(130 * audio.fftLength / audio.fs, 600));
+            e.Graphics.DrawLine(blackPen, new Point(262 * audio.fftLength / audio.fs, 700), new Point(262 * audio.fftLength / audio.fs, 600));
+            e.Graphics.DrawLine(blackPen, new Point(520 * audio.fftLength / audio.fs, 700), new Point(520 * audio.fftLength / audio.fs, 600));
+            e.Graphics.DrawLine(blackPen, new Point(1024 * audio.fftLength / audio.fs, 700), new Point(1024 * audio.fftLength / audio.fs, 600));
         }
     }
 }
