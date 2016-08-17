@@ -21,10 +21,11 @@
 
         public static void paintHandler(Object sender, PaintEventArgs e)
         {
-            StreamWriter writer = new StreamWriter("amplitude.txt", false);
-            writer.WriteLine("freq1  freq2  freq3");
+            string filePrefix = "1";
+            StreamWriter writer = new StreamWriter(filePrefix + ".csv", false);
+            writer.WriteLine("freq1,freq2,freq3");
             writer.Close();
-            Audio audio = new Audio("t.wav");
+            Audio audio = new Audio(filePrefix + ".wav");
 
             int length = (int)(audio.fs / 4);
             Pen blackPen = new Pen(Color.Black, 1);
@@ -48,14 +49,14 @@
                 int max1AmplitudeIndex = 0;
                 int max2AmplitudeIndex = 0;
                 int max3AmplitudeIndex = 0;
-                AudioProcessor.getMax3Amp(audio, length, markLength, ref max1AmplitudeIndex, ref max2AmplitudeIndex, ref max3AmplitudeIndex);
+                //audio.getMax3Amp(audio, length, markLength, ref max1AmplitudeIndex, ref max2AmplitudeIndex, ref max3AmplitudeIndex);
                 if(max1AmplitudeIndex == 0 || max2AmplitudeIndex == 0 || max3AmplitudeIndex == 0)
                 {
                     throw new Exception("paintHandler Error: Fail to getMax3Amp");
                 }
 
                 writer = new StreamWriter("amplitude.txt", true);
-                writer.WriteLine($"{audio.fs * max1AmplitudeIndex / length} {audio.fs * max2AmplitudeIndex / length} {audio.fs * max3AmplitudeIndex / length}");
+                writer.WriteLine($"{audio.fs * max1AmplitudeIndex / length},{audio.fs * max2AmplitudeIndex / length},{audio.fs * max3AmplitudeIndex / length}");
                 writer.Close();
 
 

@@ -1,5 +1,7 @@
 ﻿namespace Lyra.WaveParser
 {
+    using System;
+    using AForge.Math;
     using NAudio.Wave;
 
     /// <summary>
@@ -16,12 +18,12 @@
         /// frequency of sampling
         /// </summary>
         public int fs { get; set; }
-        
+
         /// <summary>
         /// Error of audio file
         /// </summary>
         private AUDIO_ERROR Err = AUDIO_ERROR.NONE;
-        
+
         /// <summary>
         /// max value of int
         /// </summary>
@@ -85,10 +87,18 @@
                 double scale = rawFs / this.fs;
                 int length = (int)(rawLength / scale);
                 this.data = new byte[length];
-                for(int i = 0; i < length; ++i)
+                for (int i = 0; i < length; ++i)
                 {
-                    //middle value sampling
-                    
+                    //average value filter
+                    int result = 0;
+                    int startIndex = (int)(scale * i);
+                    int endIndex = (int)(scale * (i + 1));
+                    for (int j = startIndex; j < endIndex; ++j)
+                    {
+                        result += rawData[j];
+                    }
+
+                    this.data[i] = (byte)(result / (endIndex - startIndex));
                 }
             }
             catch
@@ -97,14 +107,150 @@
                 return;
             }
         }
+
+        public float[][] get3MaxAmpFreqs(int count)
+        {
+            //[TODO] count is 16 magically, and should add time selection support
+            float[][] result = new float[count][];
+
+            //0.25s
+            int fftLength = this.fs / 4;
+            Complex[] fftData = new Complex[fftLength];
+
+            int offset = 4096;
+            for (int i = 0; i < count; ++i, offset += 512)
+            {
+                for (int j = 0; j < fftLength; ++j) {
+                    fftData[j] = new Complex(this.data[offset + j], 0);
+                }
+
+                FourierTransform.FFT(fftData, FourierTransform.Direction.Forward);
+                for (int j = 0; j < fftLength / 2; ++j)
+                {
+                    fftData[j].Re = fftData[j].Re * fftData[j].Re + fftData[j].Im * fftData[j].Im;
+                }
+
+                //find 3 frequencies with max amplitude
+                //[TODO] fix this
+                fftData[3].Re = fftData[3].Re * fftData[3].Re + fftData[3].Im * fftData[3].Im;
+                fftData[1].Re = fftData[1].Re * fftData[1].Re + fftData[1].Im * fftData[1].Im;
+                fftData[2].Re = fftData[2].Re * fftData[2].Re + fftData[2].Im * fftData[2].Im;
+                int max1AmplitudeIndex = 0;
+                int max2AmplitudeIndex = 0;
+                int max3AmplitudeIndex = 0;
+
+                if (fftData[3].Re >= fftData[1].Re && fftData[3].Re >= fftData[2].Re)
+                {
+                    max1AmplitudeIndex = 3;
+                    //12
+                    if (fftData[1].Re >= fftData[2].Re)
+                    {
+                        max2AmplitudeIndex = 1;
+                        max3AmplitudeIndex = 2;
+                    }
+                    else
+                    {
+                        max2AmplitudeIndex = 2;
+                        max3AmplitudeIndex = 1;
+                    }
+                }
+                else if (fftData[1].Re >= fftData[3].Re && fftData[1].Re >= fftData[2].Re)
+                {
+                    max1AmplitudeIndex = 1;
+                    //32
+                    if (fftData[3].Re >= fftData[2].Re)
+                    {
+                        max2AmplitudeIndex = 3;
+                        max3AmplitudeIndex = 2;
+                    }
+                    else
+                    {
+                        max2AmplitudeIndex = 2;
+                        max3AmplitudeIndex = 3;
+                    }
+                }
+                else if (fftData[2].Re >= fftData[3].Re && fftData[2].Re >= fftData[1].Re)
+                {
+                    max1AmplitudeIndex = 2;
+                    //31
+                    if (fftData[3].Re >= fftData[1].Re)
+                    {
+                        max2AmplitudeIndex = 3;
+                        max3AmplitudeIndex = 1;
+                    }
+                    else
+                    {
+                        max2AmplitudeIndex = 1;
+                        max3AmplitudeIndex = 3;
+                    }
+                }
+                else
+                {
+                    throw new Exception("xxxxx");
+                }
+
+
+                for (int j = 4; j < fftLength / 2; ++j)
+                {
+                    fftData[j].Re = fftData[j].Re * fftData[j].Re + fftData[j].Im * fftData[j].Im;
+                    if (fftData[j].Re > fftData[max1AmplitudeIndex].Re)
+                    {
+                        max3AmplitudeIndex = max2AmplitudeIndex;
+                        max2AmplitudeIndex = max1AmplitudeIndex;
+                        max1AmplitudeIndex = j;
+                    }
+                    else if (fftData[j].Re > fftData[max2AmplitudeIndex].Re)
+                    {
+                        max3AmplitudeIndex = max2AmplitudeIndex;
+                        max2AmplitudeIndex = j;
+                    }
+                    else if (fftData[j].Re > fftData[max3AmplitudeIndex].Re)
+                    {
+                        max3AmplitudeIndex = j;
+                    }
+                }
+
+                result[i] = new float[3];
+                result[i][0] = (float)max1AmplitudeIndex * this.fs / fftLength;
+                result[i][1] = (float)max2AmplitudeIndex * this.fs / fftLength;
+                result[i][2] = (float)max3AmplitudeIndex * this.fs / fftLength;
+                if(result[i][1] < result[i][2])
+                {
+                    float tmp = result[i][1];
+                    result[i][1] = result[i][2];
+                    result[i][2] = tmp;
+                }
+                if (result[i][0] < result[i][1])
+                {
+                    float tmp = result[i][0];
+                    result[i][0] = result[i][1];
+                    result[i][1] = tmp;
+                }
+                if (result[i][1] < result[i][2])
+                {
+                    float tmp = result[i][1];
+                    result[i][1] = result[i][2];
+                    result[i][2] = tmp;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// get result notes from audio
+        /// </summary>
+        /// <returns></returns>
         public float[] GetNotes()
         {
-            if (Err != AUDIO_ERROR.NONE)
+            if(Err != AUDIO_ERROR.NONE)
             {
                 return null;
             }
 
-            return new float[3] { 1, 2, 3 };
+
+
+            return null;
         }
 
         public string GetError()
@@ -126,6 +272,8 @@
             }
         }
     }
+    
+        
 
     internal enum AUDIO_ERROR { NONE, UNKNOWN_FILE_FORMAT, AUDIO_TOO_LONG, AUDIO_TOO_SHORT, AUDIO_SAMPLE_NOT_ENOUGH, INTERNAL_ERROR};
 }
