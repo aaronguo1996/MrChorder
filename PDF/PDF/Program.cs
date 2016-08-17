@@ -24,23 +24,6 @@ namespace PDF
         const float defaultEndRight = 500;
         static void Main(string[] args)
         {
-            Document document = new Document();
-            PdfWriter writer = PdfWriter.GetInstance(document, new FileStream("F:\\Microsoft\\MrChorder\\t.pdf", FileMode.OpenOrCreate));
-
-            //Console.Write("%f %f", PageSize.A4.Height, PageSize.A4.Width);
-            //open
-            document.Open();
-
-            //hello world
-            document.AddTitle("Hello World");
-            document.AddSubject("Music Score");
-            //842 595
-            Paragraph musicName = new Paragraph("Name of Music");
-            musicName.Alignment = Element.ALIGN_CENTER; 
-            document.Add(musicName);
-
-            //draw
-            PdfContentByte content = writer.DirectContent;
 
             //array test
             float[] testMusic;
@@ -50,6 +33,53 @@ namespace PDF
                 testMusic[n] = n % 20 - 4;
             }
             int size = 50;
+            ScoreCreation(testMusic, size, "NAME", "X", "Y", 1);
+
+        }
+
+        /*
+         * 
+         */
+        static void ScoreCreation(float[] testMusic, int size, string name, string fromName, string toName, int mode)
+        {
+            Document document = new Document();
+            PdfWriter writer = PdfWriter.GetInstance(document, new FileStream("C:/Users/t-yaxie/Desktop/Fun/MrChorder/t.pdf", FileMode.OpenOrCreate));
+
+            //Console.Write("%f %f", PageSize.A4.Height, PageSize.A4.Width);
+            //open
+            document.Open();
+
+            //hello world
+            document.AddTitle("Hello World");
+            document.AddSubject("Music Score");
+            //842 595
+            Font nameFont = new Font(Font.FontFamily.COURIER, 32f, Font.NORMAL, new BaseColor(0, 128, 128));
+            Paragraph musicName = new Paragraph(name, nameFont);
+            musicName.Alignment = Element.ALIGN_CENTER;
+            document.Add(musicName);
+
+            //draw
+            PdfContentByte content = writer.DirectContent;
+
+            Font desFont = new Font(Font.FontFamily.TIMES_ROMAN, 16f, Font.NORMAL, new BaseColor(128, 128, 255));
+            //from to mode
+            if(mode == 1)
+            {
+                string des = "This piece of music is sent from " + fromName + " to " + toName + ",\nexpressing the unconditional love.";
+                Paragraph description = new Paragraph(des, desFont);
+                //description.FirstLineIndent = PageSize.A4.Height - 2 * defaultIntervalHeight;
+                description.Alignment = Element.ALIGN_CENTER;
+                document.Add(description);
+                
+                Image corner1 = Image.GetInstance("C:/Users/t-yaxie/Desktop/Fun/MrChorder/bianjiao1.png");
+                corner1.SetAbsolutePosition(0, 0);
+                corner1.ScaleAbsoluteHeight(50f * lineSpace);
+                corner1.ScaleAbsoluteWidth(50f * lineSpace);
+                content.AddImage(corner1);
+                
+            }
+
+            //draw main
             DrawFromArray(content, testMusic, size);
 
             //close
@@ -69,17 +99,17 @@ namespace PDF
             float beginLeft = defaultBeginLeft;
             float endRight = defaultEndRight;
             float intervalHeight = defaultIntervalHeight;
-            int line = -1;
+            int line = 0;
             int c = -1;
             float width = (endRight - beginLeft) / count;
             float widthScore = (endRight - beginLeft) / (count * (tempo + 1));
             //it is moderate
             content.BeginText();
             content.SetFontAndSize(BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED), 10);
-            content.SetTextMatrix(beginLeft, PageSize.A4.Height - beginHeight + 2 * lineSpace);
-            content.ShowText("Moderate        =120");
+            content.SetTextMatrix(beginLeft, PageSize.A4.Height - beginHeight + 3 * lineSpace - intervalHeight);
+            content.ShowText("Moderate       = 120");
             content.EndText();
-            DrawOneScore(content, beginLeft + 14 * headSpace, beginHeight - 5.5f * lineSpace, 2);
+            DrawOneScore(content, beginLeft + 14 * headSpace, beginHeight - 6.5f * lineSpace + intervalHeight, 2);
             //draw the sign
             //Image sign = Image.GetInstance("F:\\Microsoft\\MrChorder\\sign.png");
             //sign.SetAbsolutePosition(beginLeft - 18, PageSize.A4.Height - (beginHeight + 5 * lineSpace));
@@ -89,9 +119,9 @@ namespace PDF
             //draw the tempo
             content.BeginText();
             content.SetFontAndSize(BaseFont.CreateFont(BaseFont.COURIER_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED), 16);
-            content.SetTextMatrix(beginLeft, PageSize.A4.Height - (beginHeight + 2 * lineSpace));
+            content.SetTextMatrix(beginLeft, PageSize.A4.Height - (beginHeight + 2 * lineSpace + intervalHeight));
             content.ShowText("4");
-            content.SetTextMatrix(beginLeft, PageSize.A4.Height - (beginHeight + 4 * lineSpace));
+            content.SetTextMatrix(beginLeft, PageSize.A4.Height - (beginHeight + 4 * lineSpace + intervalHeight));
             content.ShowText("4");
             content.EndText();
             //draw the scores
@@ -102,7 +132,7 @@ namespace PDF
                 {
                     line++;
                     //draw the sign
-                    Image sign = Image.GetInstance("F:\\Microsoft\\MrChorder\\sign.png");
+                    Image sign = Image.GetInstance("C:/Users/t-yaxie/Desktop/Fun/MrChorder/sign.png");
                     sign.SetAbsolutePosition(beginLeft - 18, PageSize.A4.Height - (beginHeight + line * intervalHeight + 5 * lineSpace));
                     sign.ScaleAbsoluteHeight(6 * lineSpace);
                     sign.ScaleAbsoluteWidth(3.5f * lineSpace);

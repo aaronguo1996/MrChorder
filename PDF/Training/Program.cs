@@ -16,9 +16,10 @@ namespace Training
     {
         static void Main(string[] args)
         {
-            DataTable table = new ExcelReader("data.xls").GetWorksheet("worksheet");
+            DataTable table = new ExcelReader("C:/Users/t-yaxie/Desktop/Fun/single_note_result/ttt.xls").GetWorksheet("Sheet1");
             //[index][features] featrues: [p1 p2 p3 p4]
             double[][] inputs = table.ToArray<double>("freq1", "freq2", "freq3");
+            //double[][] inputs = table.ToArray<double>("freq2", "freq3");
             //[outputs]
             int[] outputs = table.Columns["note"].ToArray<int>();
 
@@ -39,6 +40,7 @@ namespace Training
             double error = teacher.Run(inputs, outputs);
 
             //predict
+            int[] answers = inputs.Apply(tree.Compute);
             double[] test = new double[3] { 640, 704, 802 };
             int res = tree.Compute(test);
 
