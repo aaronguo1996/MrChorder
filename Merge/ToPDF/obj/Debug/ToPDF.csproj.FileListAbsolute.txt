@@ -4,3 +4,10 @@ C:\Users\t-zhg\Documents\Young Hackthon\MrChorder\ToPDF\bin\Debug\itextsharp.dll
 C:\Users\t-zhg\Documents\Young Hackthon\MrChorder\ToPDF\bin\Debug\itextsharp.xml
 C:\Users\t-zhg\Documents\Young Hackthon\MrChorder\ToPDF\obj\Debug\ToPDF.dll
 C:\Users\t-zhg\Documents\Young Hackthon\MrChorder\ToPDF\obj\Debug\ToPDF.pdb
+C:\Users\xieyao\Desktop\MrChorder\Merge\ToPDF\bin\Debug\ToPDF.dll
+C:\Users\xieyao\Desktop\MrChorder\Merge\ToPDF\bin\Debug\ToPDF.pdb
+C:\Users\xieyao\Desktop\MrChorder\Merge\ToPDF\bin\Debug\itextsharp.dll
+C:\Users\xieyao\Desktop\MrChorder\Merge\ToPDF\bin\Debug\itextsharp.xml
+C:\Users\xieyao\Desktop\MrChorder\Merge\ToPDF\obj\Debug\ToPDF.csprojResolveAssemblyReference.cache
+C:\Users\xieyao\Desktop\MrChorder\Merge\ToPDF\obj\Debug\ToPDF.dll
+C:\Users\xieyao\Desktop\MrChorder\Merge\ToPDF\obj\Debug\ToPDF.pdb

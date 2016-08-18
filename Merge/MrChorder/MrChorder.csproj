@@ -160,16 +160,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FFT\FFT.csproj">
-      <Project>{e0d04d5a-f2c5-4834-92b5-9c29ca0be269}</Project>
-      <Name>FFT</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ToPDF\ToPDF.csproj">
-      <Project>{6172d361-672d-4276-9a77-f6145a80f341}</Project>
-      <Name>ToPDF</Name>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
