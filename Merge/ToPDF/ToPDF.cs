@@ -119,6 +119,10 @@ namespace PDF
                     if (size - i <= count * tempo)
                     {
                         int remain = (size - i) / (int)tempo + 1;
+                        if ((size - i) % tempo == 0)
+                        {
+                            remain--;
+                        }
                         DrawFiveLines(content, beginLeft, beginLeft + ((float)remain / (float)count) * (endRight - beginLeft), beginHeight + line * intervalHeight, remain);
                         //end vertical line
                         content.MoveTo(beginLeft + ((float)remain / (float)count) * (endRight - beginLeft) - headSpace, PageSize.A4.Height - (beginHeight + line * intervalHeight));

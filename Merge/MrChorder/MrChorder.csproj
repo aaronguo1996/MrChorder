@@ -163,9 +163,9 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Lyra.WaveParser\Lyra.WaveParser.csproj">
-      <Project>{be92697f-a92c-4e88-b1c8-29f00600d08a}</Project>
-      <Name>Lyra.WaveParser</Name>
+    <ProjectReference Include="..\OnsetDetection\OnsetDetection.csproj">
+      <Project>{62600b5e-5763-4220-8f84-86fd499c061e}</Project>
+      <Name>OnsetDetection</Name>
     </ProjectReference>
     <ProjectReference Include="..\ToPDF\ToPDF.csproj">
       <Project>{6172d361-672d-4276-9a77-f6145a80f341}</Project>

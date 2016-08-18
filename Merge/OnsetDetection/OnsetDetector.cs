@@ -235,12 +235,12 @@ namespace OnsetDetection
             {
                 if (tmpTime[i] != 0)
                 {
-                    onsetTime[tmp++] = tmpTime[i];
+                    onsetTime[tmp++] = tmpTime[i] * 256;
                 }
             }
             int[] tmps = audio.GetNotes(onsetTime, tmp);
-            float[] notes = new float[tmp];
-            for(int i = 0; i < tmps.Length; ++i)
+            float[] notes = new float[tmp - 1];
+            for(int i = 0; i < tmps.Length-1; ++i)
             {
                 notes[i] = (float)tmps[i];
             }

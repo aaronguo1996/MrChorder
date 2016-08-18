@@ -7,7 +7,7 @@ namespace MrChorder.Controllers
 {
     public class ChordController : Controller
     {
-        private string filename;
+        private static string filename;
         //[HttpGet]
         public ActionResult Index()
         {

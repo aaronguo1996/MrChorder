@@ -173,4 +173,6 @@ F:\Microsoft\MrChorder\Merge\MrChorder\bin\Accord.IO.xml
 F:\Microsoft\MrChorder\Merge\MrChorder\bin\Accord.Math.xml
 F:\Microsoft\MrChorder\Merge\MrChorder\bin\Accord.Statistics.xml
 F:\Microsoft\MrChorder\Merge\MrChorder\bin\Accord.xml
+F:\Microsoft\MrChorder\Merge\MrChorder\bin\OnsetDetection.dll
+F:\Microsoft\MrChorder\Merge\MrChorder\bin\OnsetDetection.pdb
 F:\Microsoft\MrChorder\Merge\MrChorder\bin\Accord.dll.config

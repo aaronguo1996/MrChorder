@@ -133,7 +133,7 @@
             // [TODO] count is 16 magically
             // freq start from 60
             n = 5;
-            const int count = 16;
+            const int count = 128;
             double[][] result = new double[count][];
             double[] fftData;
             for (int i = 0; i < count && offset < this.data.Length - this.fftLength; ++i, offset += this.fftLength / count)
@@ -289,6 +289,7 @@
 
             int maxKey = 0;
             int maxValue = 0;
+            dic[0] = 0;
             foreach(KeyValuePair<int, int> pair in dic)
             {
                 if(pair.Value > maxValue)

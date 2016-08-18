@@ -10,7 +10,7 @@
             Audio audio = new Audio("star.wav");
             
             int[] indices = { 256, 2048, 3328, 6912, 11008, 15104, 19200, 23296, 31744, 34816, 39680, 43008, 43776, 47360, 52224, 56064, 59392, 69120 };
-            int[] notes = audio.GetNotes(indices);
+            int[] notes = audio.GetNotes(indices, indices.Length);
 
             for (int i = 0; i < notes.Length; ++i)
             {
