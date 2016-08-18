@@ -150,7 +150,7 @@ namespace OnsetDetection
             double[] smoothRes = new double[M];
             double[] sortedRes = new double[M];
             int[] onsetTime = new int[M];
-            double alpha = 40, beta = 1;
+            double alpha = 50, beta = 1;
             double T1 = 5, T2 = 70;
             for (int i = 0; i < M; ++i)
             {
@@ -161,7 +161,7 @@ namespace OnsetDetection
             }
 
             threshold = new double[M];
-            double c = 1.0 / 150;
+            double c = 1.0 / 130;
             int P = 10;
             
             for(int i = 0; i < M; ++i)
@@ -218,8 +218,8 @@ namespace OnsetDetection
                 if (onsetTime[i - 1] >= 0 && onsetTime[i] < 0 && onsetTime[i + 1] >= 0)
                 {
                     onsetTime[i] = 0;
-                    onsetTime[i + 1] = 0;
-                    ++i;
+                    onsetTime[i - 1] = 0;
+                    //++i;
                 }
             }
             
