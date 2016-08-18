@@ -1,6 +1,0 @@
-C:\Users\t-zhg\Documents\Young Hackthon\MrChorder\WavReader\bin\Debug\WavReader.dll
-C:\Users\t-zhg\Documents\Young Hackthon\MrChorder\WavReader\bin\Debug\WavReader.pdb
-C:\Users\t-zhg\Documents\Young Hackthon\MrChorder\WavReader\bin\Debug\NAudio.dll
-C:\Users\t-zhg\Documents\Young Hackthon\MrChorder\WavReader\bin\Debug\NAudio.xml
-C:\Users\t-zhg\Documents\Young Hackthon\MrChorder\WavReader\obj\Debug\WavReader.dll
-C:\Users\t-zhg\Documents\Young Hackthon\MrChorder\WavReader\obj\Debug\WavReader.pdb

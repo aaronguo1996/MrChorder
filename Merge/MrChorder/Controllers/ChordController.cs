@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using FFT;
-using PDF;
 
 namespace MrChorder.Controllers
 {
@@ -45,10 +43,10 @@ namespace MrChorder.Controllers
             //do something
             while (!System.IO.File.Exists(genPath))//wait here
             {
-                FFT.FFT fft = new FFT.FFT();
-                float[] notes = fft.fft("filename");
-                ToPDF tp = new ToPDF();
-                tp.GeneratePDF(imgPath,genPath, notes, notes.Length);
+                //[TODO]
+                //float[] notes = { 1, 2, 3, 4, 5 };
+                //ToPDF tp = new ToPDF();
+                //tp.GeneratePDF(imgPath,genPath, notes, notes.Length);
             }
             Response.Write("Return file successfully!");
             Response.End();
