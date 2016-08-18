@@ -16,8 +16,8 @@ namespace Training
     {
         static void Main(string[] args)
         {
-            DataTable table = new ExcelReader("C:/Users/t-yaxie/Desktop/Fun/single_note_result/result.xls").GetWorksheet("Sheet1");
-            DataTable test_table = new ExcelReader("C:/Users/t-yaxie/Desktop/Fun/single_note_result/result_star_50.xls").GetWorksheet("Sheet1");
+            DataTable table = new ExcelReader("F:/Microsoft/Mrchorder/data/result.xls").GetWorksheet("Sheet1");
+            DataTable test_table = new ExcelReader("F:/Microsoft/Mrchorder/data/test_star.xls").GetWorksheet("Sheet1");
             //[index][features] featrues: [p1 p2 p3 p4]
             double[][] inputs = table.ToArray<double>("freq1", "freq2", "freq3", "freq4", "freq5");
             double[][] test_inputs = test_table.ToArray<double>("freq1", "freq2", "freq3", "freq4", "freq5");
