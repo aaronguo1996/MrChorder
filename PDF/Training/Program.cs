@@ -14,18 +14,29 @@ namespace Training
 {
     class Program
     {
+        static DecisionTree tree;
+
         static void Main(string[] args)
         {
+            TreeTraining();
+
+            double[] test = { 132, 260, 392, 784, 916 };
+            int res = GetNote(test);
+
+            Console.ReadLine();
+        }
+
+        static void TreeTraining()
+        {
             DataTable table = new ExcelReader("C:/Users/t-yaxie/Desktop/Fun/single_note_result/result.xls").GetWorksheet("Sheet1");
-            DataTable test_table = new ExcelReader("C:/Users/t-yaxie/Desktop/Fun/single_note_result/result_star_50.xls").GetWorksheet("Sheet1");
+            DataTable test_table = new ExcelReader("C:/Users/t-yaxie/Desktop/Fun/single_note_result/result_star_50_bigger_20.xls").GetWorksheet("Sheet1");
             //[index][features] featrues: [p1 p2 p3 p4]
             double[][] inputs = table.ToArray<double>("freq1", "freq2", "freq3", "freq4", "freq5");
             double[][] test_inputs = test_table.ToArray<double>("freq1", "freq2", "freq3", "freq4", "freq5");
-            //double[][] inputs = table.ToArray<double>("freq2", "freq3");
             //[outputs]
             int[] outputs = table.Columns["note"].ToArray<int>();
 
-            DecisionTree tree = new DecisionTree(
+            tree = new DecisionTree(
                 inputs: new List<DecisionVariable>
                 {
                     DecisionVariable.Continuous("freq1"),
@@ -48,8 +59,11 @@ namespace Training
             //double[] test = new double[3] { 640, 704, 802 };
             //int res = tree.Compute(test);
             int[] test_result = test_inputs.Apply(tree.Compute);
+        }
 
-            Console.ReadLine();
+        static int GetNote(double[] input)
+        {
+            return tree.Compute(input);
         }
     }
 }
