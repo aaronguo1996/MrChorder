@@ -44,7 +44,7 @@ namespace MrChorder.Controllers
             {
                 //[TODO] audio file name
                 Audio audio = new Audio("test file name");
-                float[] notes = audio.GetNotes();
+                float[] notes = { 1, 2 };// audio.GetNotes();
                 //[TODO] three name
                 ToPDF.ScoreCreation(imgPath, resultFilePath, notes, notes.Length, "todoname", "todoformname", "todotoname");
             }

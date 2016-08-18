@@ -3,6 +3,7 @@
     using System;
     using AForge.Math;
     using NAudio.Wave;
+    using Training;
 
     /// <summary>
     /// audio file reader
@@ -28,6 +29,8 @@
         /// Error of audio file
         /// </summary>
         private AUDIO_ERROR Err = AUDIO_ERROR.NONE;
+
+        private LearningModel learningModel;
 
         /// <summary>
         /// max value of int
@@ -112,8 +115,10 @@
                     //mid value filter
                     Array.Sort(rawData, startIndex, endIndex - startIndex);
                     this.data[i] = rawData[(startIndex + endIndex) / 2];
-                    
                 }
+
+                //initialize learning model
+                learningModel = new LearningModel();
             }
             catch
             {
@@ -122,18 +127,16 @@
             }
         }
 
-        public float[][] GetNMaxAmpFreqs(int n)
+        public double[][] GetNMaxAmpFreqs(int n, int offset)
         {
-            //count is 32 magically
-            //[TODO] n is 5 magically, and freq start from 60
-            //const int count = 1000;
-            const int count = 32;
+            // [TODO] n is 5 magically
+            // [TODO] count is 16 magically
+            // freq start from 60
             n = 5;
-            float[][] result = new float[count][];
+            const int count = 16;
+            double[][] result = new double[count][];
             double[] fftData;
-            int offset = 0;
-            //for (int i = 0; i < count && offset < this.data.Length - this.fftLength; ++i, offset += this.fftLength / 25)
-            for (int i = 0; i < count; ++i, offset += 128)
+            for (int i = 0; i < count && offset < this.data.Length - this.fftLength; ++i, offset += this.fftLength / count)
             {
                 fftData = GetFFTResult(offset);
                 while (true)
@@ -200,10 +203,10 @@
 
                     if (passed)
                     {
-                        result[i] = new float[n];
+                        result[i] = new double[n];
                         for (int j = 0; j < n; ++j)
                         {
-                            result[i][j] = (float)tmpIndices[j] * this.fs / this.fftLength;
+                            result[i][j] = (double)tmpIndices[j] * this.fs / this.fftLength;
                         }
 
                         break;
@@ -242,7 +245,7 @@
         /// get result notes from audio
         /// </summary>
         /// <returns></returns>
-        public float[] GetNotes()
+        public int[] GetNotes(int[] indices)
         {
             //[TODO]
             if(Err != AUDIO_ERROR.NONE)
@@ -250,7 +253,22 @@
                 return null;
             }
 
-            return null;
+            int[] result = new int[indices.Length];
+            for (int i = 0; i < result.Length; ++i)
+            {
+                int index = indices[i];
+                double[][] freqs = this.GetNMaxAmpFreqs(5, index);
+                int[] notes = new int[freqs.Length];
+                for(int j = 0; j < notes.Length; ++j)
+                {
+                    notes[j] = this.learningModel.GetNote(freqs[j]);
+                }
+                //[TODO] most member
+                int maxAppearNote = notes[0];
+                result[i] = maxAppearNote;
+            }
+
+            return result;
         }
 
         public string GetError()
