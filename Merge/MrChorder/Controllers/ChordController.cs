@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
-using Lyra.WaveParser;
 using PDF;
+using OnsetDetection;
 
 namespace MrChorder.Controllers
 {
@@ -43,9 +43,8 @@ namespace MrChorder.Controllers
             while (!System.IO.File.Exists(resultFilePath))//wait here
             {
                 //[TODO] audio file name
-                Audio audio = new Audio("test file name");
-                float[] notes = { 1, 2 };// audio.GetNotes();
-                //[TODO] three name
+                OnsetDetector od = new OnsetDetector(filename);
+                float[] notes = od.GenerateNotes();
                 ToPDF.ScoreCreation(imgPath, resultFilePath, notes, notes.Length, "todoname", "todoformname", "todotoname");
             }
             Response.Write("Return file successfully!");

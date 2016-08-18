@@ -33,7 +33,7 @@ namespace OnsetDetection
             bins = audio.fftLength / 2;
         }
 
-        public double[][] normalize(double[][] points)
+        public double[][] Normalize(double[][] points)
         {
             double[][] normOutput = new double[M][];
             for (int i = 0; i < M; ++i)
@@ -78,7 +78,7 @@ namespace OnsetDetection
                 output[i] = new double[bins];
                 output[i] = audio.GetFFTResult(i * 256);
             }
-            output = normalize(output);
+            output = Normalize(output);
             return output;
         }
 
@@ -144,13 +144,12 @@ namespace OnsetDetection
             return sum;
         }
 
-        public double[] peakPick()
+        public int[] PeakPick()
         {
             filterResult = Filter();
             double[] smoothRes = new double[M];
             double[] sortedRes = new double[M];
-            double[] onsetTime = new double[M];
-            double[] tempTime = new double[M];
+            int[] onsetTime = new int[M];
             double alpha = 40, beta = 1;
             double T1 = 5, T2 = 70;
             for (int i = 0; i < M; ++i)
@@ -223,17 +222,29 @@ namespace OnsetDetection
                     ++i;
                 }
             }
+            
+            return onsetTime;
+        }
+
+        public float[] GenerateNotes()
+        {
+            int[] onsetTime = new int[M];
+            int[] tmpTime = PeakPick();
             int tmp = 0;
-            for(int i = 0; i < index; i++)
+            for (int i = 0; i < M; i++)
             {
-                if (onsetTime[i] != 0)
+                if (tmpTime[i] != 0)
                 {
-                    //onsetTime[i] *= 256;
-                    tmp++;
-                    Console.WriteLine(onsetTime[i]);
+                    onsetTime[tmp++] = tmpTime[i];
                 }
             }
-            return onsetTime;
+            int[] tmps = audio.GetNotes(onsetTime, tmp);
+            float[] notes = new float[tmp];
+            for(int i = 0; i < tmps.Length; ++i)
+            {
+                notes[i] = (float)tmps[i];
+            }
+            return notes;
         }
     }        
 }

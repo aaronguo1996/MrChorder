@@ -19,7 +19,7 @@ namespace DisplayWindow
         static OnsetDetector od;
         static void Main()
         {
-            od = new OnsetDetector("t5.wav");
+            od = new OnsetDetector("t4.wav");
             points = new double[od.M][];
             normOutput = new double[od.M][];
             for (int i = 0; i < od.M; ++i)

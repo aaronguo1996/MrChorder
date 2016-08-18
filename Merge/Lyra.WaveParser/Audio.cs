@@ -245,7 +245,7 @@
         /// get result notes from audio
         /// </summary>
         /// <returns></returns>
-        public int[] GetNotes(int[] indices)
+        public int[] GetNotes(int[] indices, int length)
         {
             //[TODO]
             if(Err != AUDIO_ERROR.NONE)
@@ -253,7 +253,7 @@
                 return null;
             }
 
-            int[] result = new int[indices.Length];
+            int[] result = new int[length];
             for (int i = 0; i < result.Length; ++i)
             {
                 int index = indices[i];
