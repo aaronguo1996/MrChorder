@@ -228,6 +228,7 @@ namespace OnsetDetection
             {
                 if (onsetTime[i] != 0)
                 {
+                    onsetTime[i] *= 256;
                     tmp++;
                     Console.WriteLine(onsetTime[i]);
                 }
