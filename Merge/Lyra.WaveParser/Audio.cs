@@ -4,7 +4,7 @@
     using AForge.Math;
     using NAudio.Wave;
     using Training;
-
+    using System.Collections.Generic;
     /// <summary>
     /// audio file reader
     /// </summary>
@@ -263,12 +263,42 @@
                 {
                     notes[j] = this.learningModel.GetNote(freqs[j]);
                 }
-                //[TODO] most member
-                int maxAppearNote = notes[0];
-                result[i] = maxAppearNote;
+
+                result[i] = this.GetMostMember(notes);
+                
             }
 
             return result;
+        }
+
+        private int GetMostMember(int[] numbers)
+        {
+            int length = numbers.Length;
+            Dictionary<int, int> dic = new Dictionary<int, int>();
+            for(int i = 0; i < length; ++i)
+            {
+                if (dic.ContainsKey(numbers[i]))
+                {
+                    dic[numbers[i]]++;
+                }
+                else
+                {
+                    dic[numbers[i]] = 0;
+                }
+            }
+
+            int maxKey = 0;
+            int maxValue = 0;
+            foreach(KeyValuePair<int, int> pair in dic)
+            {
+                if(pair.Value > maxValue)
+                {
+                    maxKey = pair.Key;
+                    maxValue = pair.Value;
+                }
+            }
+
+            return maxKey;
         }
 
         public string GetError()
