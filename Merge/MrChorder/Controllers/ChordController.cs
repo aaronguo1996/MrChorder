@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
+using Lyra.WaveParser;
+using PDF;
 
 namespace MrChorder.Controllers
 {
@@ -38,15 +36,17 @@ namespace MrChorder.Controllers
         [HttpGet]
         public void SendFile()
         {
-            string genPath = System.IO.Path.Combine(Server.MapPath("~/Generate"), System.IO.Path.GetFileName("t1.pdf"));
-            string imgPath = System.IO.Path.Combine(Server.MapPath("~/Images"), System.IO.Path.GetFileName("sign.png"));
-            //do something
-            while (!System.IO.File.Exists(genPath))//wait here
+            //todo this filename
+            string resultFilePath = System.IO.Path.Combine(Server.MapPath("~/Generate/"), System.IO.Path.GetFileName("t1.pdf"));
+            string imgPath = System.IO.Path.Combine(Server.MapPath("~/Images/"));
+            //[TODO] file name
+            while (!System.IO.File.Exists(resultFilePath))//wait here
             {
-                //[TODO]
-                //float[] notes = { 1, 2, 3, 4, 5 };
-                //ToPDF tp = new ToPDF();
-                //tp.GeneratePDF(imgPath,genPath, notes, notes.Length);
+                //[TODO] audio file name
+                Audio audio = new Audio("test file name");
+                float[] notes = audio.GetNotes();
+                //[TODO] three name
+                ToPDF.ScoreCreation(imgPath, resultFilePath, notes, notes.Length, "todoname", "todoformname", "todotoname");
             }
             Response.Write("Return file successfully!");
             Response.End();

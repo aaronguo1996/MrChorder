@@ -1,35 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Accord.Controls;
+﻿using Accord.IO;
 using Accord.MachineLearning.DecisionTrees;
 using Accord.MachineLearning.DecisionTrees.Learning;
-using System.Data;
-using Accord.IO;
 using Accord.Math;
+using System;
+using System.Collections.Generic;
+using System.Data;
 
 namespace Training
 {
-    class Program
+    public class LearningModel
     {
-        static DecisionTree tree;
+        private DecisionTree tree;
 
-        static void Main(string[] args)
+        public LearningModel()
         {
             TreeTraining();
-
-            double[] test = { 132, 260, 392, 784, 916 };
-            int res = GetNote(test);
-
-            Console.ReadLine();
         }
 
-        static void TreeTraining()
+        /// <summary>
+        /// get single from input array
+        /// </summary>
+        /// <param name="input">input array with length 5</param>
+        /// <returns></returns>
+        public int GetNote(double[] input)
         {
-            DataTable table = new ExcelReader("F:/Microsoft/Mrchorder/data/result.xls").GetWorksheet("Sheet1");
-            DataTable test_table = new ExcelReader("F:/Microsoft/Mrchorder/data/test_star.xls").GetWorksheet("Sheet1");
+            return tree.Compute(input);
+        }
+
+        private void TreeTraining()
+        {
+            string modelPath = "F:/Microsoft/MrChorder/Merge/Training/LearningModelData/";
+            DataTable table = new ExcelReader(modelPath + "result.xls").GetWorksheet("Sheet1");
+            DataTable test_table = new ExcelReader(modelPath + "test_star.xls").GetWorksheet("Sheet1");
 
             //[index][features] featrues: [p1 p2 p3 p4]
             double[][] inputs = table.ToArray<double>("freq1", "freq2", "freq3", "freq4", "freq5");
@@ -56,15 +58,10 @@ namespace Training
             double error = teacher.Run(inputs, outputs);
 
             //predict
-            int[] answers = inputs.Apply(tree.Compute);
+            //int[] answers = inputs.Apply(tree.Compute);
             //double[] test = new double[3] { 640, 704, 802 };
             //int res = tree.Compute(test);
-            int[] test_result = test_inputs.Apply(tree.Compute);
-        }
-
-        static int GetNote(double[] input)
-        {
-            return tree.Compute(input);
+            //int[] test_result = test_inputs.Apply(tree.Compute);
         }
     }
 }
