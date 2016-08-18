@@ -126,11 +126,13 @@
         {
             //count is 32 magically
             //[TODO] n is 5 magically, and freq start from 60
+            //const int count = 1000;
             const int count = 32;
             n = 5;
             float[][] result = new float[count][];
             double[] fftData;
-            int offset = 2048;
+            int offset = 0;
+            //for (int i = 0; i < count && offset < this.data.Length - this.fftLength; ++i, offset += this.fftLength / 25)
             for (int i = 0; i < count; ++i, offset += 128)
             {
                 fftData = GetFFTResult(offset);
@@ -189,7 +191,7 @@
                     //elinimate near frequency
                     for (int j = 1; j < n; ++j)
                     {
-                        if (tmpIndices[j] == tmpIndices[j - 1] + 1)
+                        if (tmpIndices[j] <= tmpIndices[j - 1] + 5)
                         {
                             fftData[tmpIndices[j]] = 0;
                             passed = false;
@@ -201,7 +203,7 @@
                         result[i] = new float[n];
                         for (int j = 0; j < n; ++j)
                         {
-                            result[i][j] = (float)tmpIndices[0] * this.fs / this.fftLength;
+                            result[i][j] = (float)tmpIndices[j] * this.fs / this.fftLength;
                         }
 
                         break;
