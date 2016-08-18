@@ -4,7 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+<<<<<<< HEAD
+    <ProjectGuid>{E0DAEE21-9650-4E8E-8011-95277D861905}</ProjectGuid>
+=======
     <ProjectGuid>{197D71C7-DCB9-4D32-88AC-9D13E2811B09}</ProjectGuid>
+>>>>>>> d52c8c2d2a9a61b8135f6917fcc8eec87f496d44
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Training</RootNamespace>
@@ -39,8 +43,21 @@
       <HintPath>..\packages\Accord.3.0.2\lib\net45\Accord.dll</HintPath>
       <Private>True</Private>
     </Reference>
+<<<<<<< HEAD
+    <Reference Include="Accord.Controls.Imaging, Version=3.0.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Controls.Imaging.3.0.2\lib\net45\Accord.Controls.Imaging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accord.Controls.Vision, Version=3.0.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Controls.Vision.3.0.2\lib\net45\Accord.Controls.Vision.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accord.Imaging, Version=3.0.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Imaging.3.0.2\lib\net45\Accord.Imaging.dll</HintPath>
+=======
     <Reference Include="Accord.Controls, Version=3.0.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
       <HintPath>..\packages\Accord.Controls.3.0.2\lib\net45\Accord.Controls.dll</HintPath>
+>>>>>>> d52c8c2d2a9a61b8135f6917fcc8eec87f496d44
       <Private>True</Private>
     </Reference>
     <Reference Include="Accord.IO, Version=3.0.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
@@ -59,6 +76,17 @@
       <HintPath>..\packages\Accord.Statistics.3.0.2\lib\net45\Accord.Statistics.dll</HintPath>
       <Private>True</Private>
     </Reference>
+<<<<<<< HEAD
+    <Reference Include="Accord.Video, Version=3.0.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Video.3.0.2\lib\net45\Accord.Video.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accord.Vision, Version=3.0.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Vision.3.0.2\lib\net45\Accord.Vision.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+=======
+>>>>>>> d52c8c2d2a9a61b8135f6917fcc8eec87f496d44
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -67,10 +95,13 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+<<<<<<< HEAD
+=======
     <Reference Include="ZedGraph, Version=5.1.6.417, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
       <HintPath>..\packages\ZedGraph.5.1.6\lib\net35-Client\ZedGraph.dll</HintPath>
       <Private>True</Private>
     </Reference>
+>>>>>>> d52c8c2d2a9a61b8135f6917fcc8eec87f496d44
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -80,9 +111,12 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+<<<<<<< HEAD
+=======
   <ItemGroup>
     <Content Include="License-LGPL.txt" />
   </ItemGroup>
+>>>>>>> d52c8c2d2a9a61b8135f6917fcc8eec87f496d44
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Accord.3.0.2\build\Accord.targets" Condition="Exists('..\packages\Accord.3.0.2\build\Accord.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
