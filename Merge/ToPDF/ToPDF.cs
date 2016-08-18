@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using iTextSharp;
-using iTextSharp.text;
+﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
+using System.IO;
 
 namespace PDF
 {
@@ -21,12 +15,13 @@ namespace PDF
         const float defaultIntervalHeight = 80;
         const float defaultBeginLeft = 100;
         const float defaultEndRight = 500;
-        static private string imagePath;
-        public void GeneratePDF(string imgPath, string path, float[] testMusic, int size)
+        static string imagePath;
+
+        public static void ScoreCreation(string sourcePath, string resultFilePath, float[] testMusic, int size, string name, string fromName, string toName, int mode = 1)
         {
-            imagePath = imgPath;
+            imagePath = sourcePath + "sign.png";
             Document document = new Document();
-            PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(path, FileMode.OpenOrCreate));
+            PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(resultFilePath, FileMode.OpenOrCreate));
 
             //Console.Write("%f %f", PageSize.A4.Height, PageSize.A4.Width);
             //open
@@ -36,21 +31,33 @@ namespace PDF
             document.AddTitle("Hello World");
             document.AddSubject("Music Score");
             //842 595
-            Paragraph musicName = new Paragraph("Name of Music");
+            Font nameFont = new Font(Font.FontFamily.COURIER, 32f, Font.NORMAL, new BaseColor(0, 128, 128));
+            Paragraph musicName = new Paragraph(name, nameFont);
             musicName.Alignment = Element.ALIGN_CENTER;
             document.Add(musicName);
 
             //draw
             PdfContentByte content = writer.DirectContent;
 
-            //array test [TODO]
-            /*float[] testMusic;
-            testMusic = new float[50];
-            for(int n = 0; n < 50; n++)
+            Font desFont = new Font(Font.FontFamily.TIMES_ROMAN, 16f, Font.NORMAL, new BaseColor(128, 128, 255));
+            //from to mode
+            if (mode == 1)
             {
-                testMusic[n] = n % 20 - 4;
+                string des = "This piece of music is sent from " + fromName + " to " + toName + ",\nexpressing the unconditional love.";
+                Paragraph description = new Paragraph(des, desFont);
+                //description.FirstLineIndent = PageSize.A4.Height - 2 * defaultIntervalHeight;
+                description.Alignment = Element.ALIGN_CENTER;
+                document.Add(description);
+
+                Image corner1 = Image.GetInstance(sourcePath + "corner.png");
+                corner1.SetAbsolutePosition(0, 0);
+                corner1.ScaleAbsoluteHeight(50f * lineSpace);
+                corner1.ScaleAbsoluteWidth(50f * lineSpace);
+                content.AddImage(corner1);
+
             }
-            int size = 50;*/
+
+            //draw main
             DrawFromArray(content, testMusic, size);
 
             //close
@@ -70,17 +77,17 @@ namespace PDF
             float beginLeft = defaultBeginLeft;
             float endRight = defaultEndRight;
             float intervalHeight = defaultIntervalHeight;
-            int line = -1;
+            int line = 0;
             int c = -1;
             float width = (endRight - beginLeft) / count;
             float widthScore = (endRight - beginLeft) / (count * (tempo + 1));
             //it is moderate
             content.BeginText();
             content.SetFontAndSize(BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED), 10);
-            content.SetTextMatrix(beginLeft, PageSize.A4.Height - beginHeight + 2 * lineSpace);
-            content.ShowText("Moderate        =120");
+            content.SetTextMatrix(beginLeft, PageSize.A4.Height - beginHeight + 3 * lineSpace - intervalHeight);
+            content.ShowText("Moderate       = 120");
             content.EndText();
-            DrawOneScore(content, beginLeft + 14 * headSpace, beginHeight - 5.5f * lineSpace, 2);
+            DrawOneScore(content, beginLeft + 14 * headSpace, beginHeight - 6.5f * lineSpace + intervalHeight, 2);
             //draw the sign
             //Image sign = Image.GetInstance("F:\\Microsoft\\MrChorder\\sign.png");
             //sign.SetAbsolutePosition(beginLeft - 18, PageSize.A4.Height - (beginHeight + 5 * lineSpace));
@@ -90,9 +97,9 @@ namespace PDF
             //draw the tempo
             content.BeginText();
             content.SetFontAndSize(BaseFont.CreateFont(BaseFont.COURIER_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED), 16);
-            content.SetTextMatrix(beginLeft, PageSize.A4.Height - (beginHeight + 2 * lineSpace));
+            content.SetTextMatrix(beginLeft, PageSize.A4.Height - (beginHeight + 2 * lineSpace + intervalHeight));
             content.ShowText("4");
-            content.SetTextMatrix(beginLeft, PageSize.A4.Height - (beginHeight + 4 * lineSpace));
+            content.SetTextMatrix(beginLeft, PageSize.A4.Height - (beginHeight + 4 * lineSpace + intervalHeight));
             content.ShowText("4");
             content.EndText();
             //draw the scores
@@ -111,7 +118,7 @@ namespace PDF
                     //DrawFiveLines(content, beginLeft, endRight, beginHeight + line * intervalHeight, count);
                     if (size - i <= count * tempo)
                     {
-                        int remain = (size - i) % (int)tempo == 0 ? (size - i) / (int)tempo : (size - i) / (int)tempo + 1;
+                        int remain = (size - i) / (int)tempo + 1;
                         DrawFiveLines(content, beginLeft, beginLeft + ((float)remain / (float)count) * (endRight - beginLeft), beginHeight + line * intervalHeight, remain);
                         //end vertical line
                         content.MoveTo(beginLeft + ((float)remain / (float)count) * (endRight - beginLeft) - headSpace, PageSize.A4.Height - (beginHeight + line * intervalHeight));

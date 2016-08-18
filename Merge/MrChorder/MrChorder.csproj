@@ -125,7 +125,9 @@
     <Content Include="CSS\style.css" />
     <Content Include="Global.asax" />
     <Content Include="Images\Back_dot.png" />
+    <Content Include="Images\corner.png" />
     <Content Include="Images\Logo.png" />
+    <Content Include="Images\sign.png" />
     <Content Include="JS\jquery-3.1.0.js" />
     <Content Include="JS\nprogress.js" />
     <Content Include="JS\upload.js" />
@@ -159,6 +161,16 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Lyra.WaveParser\Lyra.WaveParser.csproj">
+      <Project>{be92697f-a92c-4e88-b1c8-29f00600d08a}</Project>
+      <Name>Lyra.WaveParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ToPDF\ToPDF.csproj">
+      <Project>{6172d361-672d-4276-9a77-f6145a80f341}</Project>
+      <Name>ToPDF</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

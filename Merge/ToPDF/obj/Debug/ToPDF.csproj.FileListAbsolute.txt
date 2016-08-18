@@ -11,3 +11,10 @@ C:\Users\xieyao\Desktop\MrChorder\Merge\ToPDF\bin\Debug\itextsharp.xml
 C:\Users\xieyao\Desktop\MrChorder\Merge\ToPDF\obj\Debug\ToPDF.csprojResolveAssemblyReference.cache
 C:\Users\xieyao\Desktop\MrChorder\Merge\ToPDF\obj\Debug\ToPDF.dll
 C:\Users\xieyao\Desktop\MrChorder\Merge\ToPDF\obj\Debug\ToPDF.pdb
+F:\Microsoft\MrChorder\Merge\ToPDF\bin\Debug\ToPDF.dll
+F:\Microsoft\MrChorder\Merge\ToPDF\bin\Debug\ToPDF.pdb
+F:\Microsoft\MrChorder\Merge\ToPDF\bin\Debug\itextsharp.dll
+F:\Microsoft\MrChorder\Merge\ToPDF\bin\Debug\itextsharp.xml
+F:\Microsoft\MrChorder\Merge\ToPDF\obj\Debug\ToPDF.csprojResolveAssemblyReference.cache
+F:\Microsoft\MrChorder\Merge\ToPDF\obj\Debug\ToPDF.dll
+F:\Microsoft\MrChorder\Merge\ToPDF\obj\Debug\ToPDF.pdb
