@@ -29,8 +29,9 @@ namespace Training
 
         private void TreeTraining()
         {
-            DataTable table = new ExcelReader("F:/Microsoft/Mrchorder/data/result.xls").GetWorksheet("Sheet1");
-            DataTable test_table = new ExcelReader("F:/Microsoft/Mrchorder/data/test_star.xls").GetWorksheet("Sheet1");
+            string modelPath = "F:/Microsoft/MrChorder/Merge/Training/LearningModelData/";
+            DataTable table = new ExcelReader(modelPath + "result.xls").GetWorksheet("Sheet1");
+            DataTable test_table = new ExcelReader(modelPath + "test_star.xls").GetWorksheet("Sheet1");
 
             //[index][features] featrues: [p1 p2 p3 p4]
             double[][] inputs = table.ToArray<double>("freq1", "freq2", "freq3", "freq4", "freq5");

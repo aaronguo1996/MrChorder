@@ -153,3 +153,12 @@ F:\Microsoft\MrChorder\Merge\MrChorder\bin\itextsharp.xml
 F:\Microsoft\MrChorder\Merge\MrChorder\obj\Debug\MrChorder.csprojResolveAssemblyReference.cache
 F:\Microsoft\MrChorder\Merge\MrChorder\obj\Debug\MrChorder.dll
 F:\Microsoft\MrChorder\Merge\MrChorder\obj\Debug\MrChorder.pdb
+F:\Microsoft\MrChorder\Merge\MrChorder\bin\Accord.dll.config
+F:\Microsoft\MrChorder\Merge\MrChorder\bin\Lyra.WaveParser.dll
+F:\Microsoft\MrChorder\Merge\MrChorder\bin\NAudio.dll
+F:\Microsoft\MrChorder\Merge\MrChorder\bin\AForge.Math.dll
+F:\Microsoft\MrChorder\Merge\MrChorder\bin\AForge.dll
+F:\Microsoft\MrChorder\Merge\MrChorder\bin\Lyra.WaveParser.pdb
+F:\Microsoft\MrChorder\Merge\MrChorder\bin\NAudio.xml
+F:\Microsoft\MrChorder\Merge\MrChorder\bin\AForge.Math.xml
+F:\Microsoft\MrChorder\Merge\MrChorder\bin\AForge.xml
