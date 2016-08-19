@@ -8,6 +8,7 @@ namespace MrChorder.Controllers
     public class ChordController : Controller
     {
         private static string filename;
+        private static string wavFile;
         //[HttpGet]
         public ActionResult Index()
         {
@@ -24,7 +25,8 @@ namespace MrChorder.Controllers
                 filename = path;
                 file.SaveAs(path);
             }
-            string genPath = System.IO.Path.Combine(Server.MapPath("~/Generate"), System.IO.Path.GetFileName("t1.pdf"));
+            wavFile = filename.Substring(filename.LastIndexOf('\\') + 1, filename.Length - filename.LastIndexOf('\\') - 5);
+            string genPath = System.IO.Path.Combine(Server.MapPath("~/Generate"), System.IO.Path.GetFileName("AnalyseResult.pdf"));
             if (System.IO.File.Exists(genPath))
             {
                 System.IO.File.Delete(genPath);
@@ -37,15 +39,18 @@ namespace MrChorder.Controllers
         public void SendFile()
         {
             //todo this filename
-            string resultFilePath = System.IO.Path.Combine(Server.MapPath("~/Generate/"), System.IO.Path.GetFileName("t1.pdf"));
+
+            string[] nameElements = wavFile.Split('_');
+
+            string resultFilePath = System.IO.Path.Combine(Server.MapPath("~/Generate/"), System.IO.Path.GetFileName("AnalyseResult.pdf"));
             string imgPath = System.IO.Path.Combine(Server.MapPath("~/Images/"));
-            //[TODO] file name
+            
             while (!System.IO.File.Exists(resultFilePath))//wait here
             {
                 //[TODO] audio file name
                 OnsetDetector od = new OnsetDetector(filename);
                 float[] notes = od.GenerateNotes();
-                ToPDF.ScoreCreation(imgPath, resultFilePath, notes, notes.Length, "todoname", "todoformname", "todotoname");
+                ToPDF.ScoreCreation(imgPath, resultFilePath, notes, notes.Length, (nameElements.Length >= 1) ? nameElements[0] : "UndefinedChordName", (nameElements.Length >= 2) ? nameElements[1] : "Anonymous", (nameElements.Length >= 3) ? nameElements[2] : "Unpredictable Nature");
             }
             Response.Write("Return file successfully!");
             Response.End();

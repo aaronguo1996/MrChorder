@@ -49,7 +49,7 @@ function displayPDF() {
         cache: false,
         success: function (res) {
             NProgress.done();
-            document.getElementById("result").innerHTML = "<iframe src='/Generate/t1.pdf'></iframe>";
+            document.getElementById("result").innerHTML = "<iframe src='/Generate/AnalyseResult.pdf'></iframe>";
             //alert(res);
         },
         error: function (request, s, error) {

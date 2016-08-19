@@ -29,7 +29,7 @@ namespace Training
 
         private void TreeTraining()
         {
-            string modelPath = "C:\\Users\\t-zhg\\Documents\\Young Hackthon\\MrChorder-git\\Merge\\Training\\LearningModelData\\";
+            string modelPath = "C:\\Users\\t-soying\\Documents\\GitHub\\MrChorder\\Merge\\Training\\LearningModelData\\";
             DataTable table = new ExcelReader(modelPath + "result.xls").GetWorksheet("Sheet1");
             DataTable test_table = new ExcelReader(modelPath + "test_star.xls").GetWorksheet("Sheet1");
 
