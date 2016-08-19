@@ -161,7 +161,7 @@ namespace OnsetDetection
             }
 
             threshold = new double[M];
-            double c = 1.0 / 130;
+            double c = 1.0 / 140;
             int P = 10;
             
             for(int i = 0; i < M; ++i)

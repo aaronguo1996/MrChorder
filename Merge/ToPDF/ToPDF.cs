@@ -49,6 +49,11 @@ namespace PDF
                 description.Alignment = Element.ALIGN_CENTER;
                 document.Add(description);
 
+                string copyRight = "Presented to you by Mr. Chorder.";
+                description = new Paragraph(copyRight, new Font(Font.FontFamily.TIMES_ROMAN, 12f, Font.ITALIC, new BaseColor(128, 128, 128)));
+                description.Alignment = Element.ALIGN_CENTER;
+                document.Add(description);
+
                 Image corner1 = Image.GetInstance(sourcePath + "corner.png");
                 corner1.SetAbsolutePosition(0, 0);
                 corner1.ScaleAbsoluteHeight(50f * lineSpace);
